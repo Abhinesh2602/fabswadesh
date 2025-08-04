@@ -1,0 +1,204 @@
+<div class="collection-circles-wrapper">
+  {% if section.settings.title != blank %}
+    <h2 class="collection-circles-heading">{{ section.settings.title }}</h2>
+  {% endif %}
+
+  <div class="collection-circles-grid">
+    {% for block in section.blocks %}
+      {% assign collection = block.settings.collection %}
+      {% if collection != blank %}
+        <a href="{{ collection.url }}" class="collection-circle-item">
+          <div
+            class="circle-image"
+            style="background-image: url('{{ collection.image | image_url: width: 400 }}');"
+          ></div>
+          <p class="collection-title">{{ collection.title }}</p>
+        </a>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+<style>
+    .collection-circles-wrapper {
+      padding-left:10px;
+      padding-right:10px;
+      padding-top:14px;
+      padding-bottom:20px;
+      text-align: center;
+      background: #dbcaca;
+    }
+
+    .collection-circles-heading {
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .collection-circles-grid {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+    }
+
+    .collection-circle-item {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .circle-image {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background-size: cover;
+      background-position: center center;
+      margin: auto;
+    }
+
+    .collection-title {
+      margin-top: 0.5rem;
+      font-weight: 500;
+      font-size:20px
+    }
+
+  @media (max-width: 1200px) {
+
+    .collection-circles-heading {
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .collection-circles-grid {
+      gap: 1rem;
+      flex-wrap: nowrap;
+    }
+
+    .circle-image {
+      width: 100px;
+      height: 100px;
+    }
+
+    .collection-title {
+      font-size:14px
+    }
+
+  }
+
+    @media (max-width: 767px) {
+
+    .collection-circles-heading {
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .collection-circles-grid {
+      gap: 1rem;
+      flex-wrap: nowrap;
+    }
+
+    .circle-image {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background-size: cover;
+      background-position: center;
+      margin: auto;
+    }
+
+    .collection-title {
+      font-size:14px
+    }
+
+  }
+
+ 
+
+    @media (max-width: 500px) {
+
+    .collection-circles-heading {
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .collection-circles-grid {
+      gap: 0.4rem;
+      flex-wrap: nowrap;
+    }
+
+    .circle-image {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background-size: cover;
+      background-position: center;
+      margin: auto;
+    }
+
+    .collection-title {
+      font-size:10px
+    }
+
+  }
+
+  
+    @media (max-width: 410px) {
+
+    .collection-circles-heading {
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .collection-circles-grid {
+      gap: 0.4rem;
+      flex-wrap: nowrap;
+    }
+
+    .circle-image {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-size: cover;
+      background-position: center;
+      margin: auto;
+    }
+
+    .collection-title {
+      font-size:10px
+    }
+
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Collection Circles",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Shop by Category"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Choose a collection"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "Collection Circles",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}

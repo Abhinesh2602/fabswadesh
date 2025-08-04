@@ -1,0 +1,94 @@
+{% comment %}
+  Slideshow – Responsive, Autoplay (JS), Desktop & Mobile Images
+{% endcomment %}
+
+<div class="slideshow-js-wrapper" id="SlideshowJS-{{ section.id }}">
+  <div class="slideshow-js-track">
+    {% for block in section.blocks %}
+      {% assign desktop_image = block.settings.image %}
+      {% assign mobile_image = block.settings.image_mobile %}
+      {% if desktop_image or mobile_image %}
+        <div class="slideshow-js-slide">
+          <picture>
+            {% if mobile_image %}
+              <source media="(max-width: 767px)" srcset="{{ mobile_image | image_url: width: 800 }}">
+            {% endif %}
+            {% if desktop_image %}
+              <img src="{{ desktop_image | image_url: width: 1600 }}" alt="Slide" loading="lazy">
+            {% endif %}
+          </picture>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+<style>
+.slideshow-js-wrapper {
+  overflow: hidden;
+  position: relative;
+}
+.slideshow-js-track {
+  display: flex;
+  transition: transform 0.6s ease;
+  will-change: transform;
+}
+.slideshow-js-slide {
+  flex: 0 0 100%;
+  max-width: 100%;
+}
+.slideshow-js-slide img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const wrapper = document.getElementById("SlideshowJS-{{ section.id }}");
+    const track = wrapper.querySelector(".slideshow-js-track");
+    const slides = wrapper.querySelectorAll(".slideshow-js-slide");
+
+    if (slides.length <= 1) return; // Only 1 image – skip autoplay
+
+    let currentIndex = 0;
+
+    setInterval(() => {
+      currentIndex = (currentIndex + 1) % slides.length;
+      track.style.transform = `translateX(-${currentIndex * 100}%)`;
+    }, 5000); // Change slide every 5 seconds
+  });
+</script>
+
+{% schema %}
+{
+  "name": "JS Autoplay Slideshow",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "image_slide",
+      "name": "Image Slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Desktop Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_mobile",
+          "label": "Mobile Image"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "JS Autoplay Slideshow",
+      "category": "Image"
+    }
+  ]
+}
+{% endschema %}

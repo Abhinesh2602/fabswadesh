@@ -1,0 +1,194 @@
+<section class="collection-grid-section">
+  <div class="collection-container">
+    {% if section.settings.title != blank %}
+      <h2 class="collection-grid__heading">{{ section.settings.title }}</h2>
+    {% endif %}
+
+    <div class="collection-grid">
+      {% for block in section.blocks %}
+        {% assign collection = block.settings.collection %}
+        {% if collection %}
+          <div class="collection-grid__item">
+            <a href="{{ collection.url }}" class="collection-grid__link">
+              {% if block.settings.custom_image != blank %}
+                <img
+                  src="{{ block.settings.custom_image | image_url: width: 800 }}"
+                  alt="{{ collection.title | escape }}"
+                  loading="lazy"
+                >
+              {% elsif collection.image %}
+                <img
+                  src="{{ collection.image | image_url: width: 800 }}"
+                  alt="{{ collection.title | escape }}"
+                  loading="lazy"
+                >
+              {% endif %}
+
+              <div class="collection-grid__overlay">
+                <div class="collection-grid__title">{{ collection.title }}</div>
+                <span class="collection-grid__button">Shop Now</span>
+              </div>
+            </a>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<style>
+  .collection-container {
+    padding: 40px 20px;
+    margin: 0 auto;
+    max-width:1500px;
+  }
+
+  .collection-grid__heading {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 30px;
+    animation: fadeInDown 0.8s ease-out;
+  }
+
+  .collection-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    animation: fadeInUp 1s ease-out;
+  }
+
+  .collection-grid__item {
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    aspect-ratio: 1 / 1; 
+  }
+
+  .collection-grid__item:hover img {
+    transform: scale(1.05);
+  }
+
+  .collection-grid__item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+
+  .collection-grid__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.4s ease;
+  }
+
+  .collection-grid__item:hover .collection-grid__overlay {
+    opacity: 1;
+  }
+
+  .collection-grid__title {
+    color: #fff;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  .collection-grid__button {
+    display: inline-block;
+    background-color: #ffffff;
+    color: #000;
+    padding: 8px 20px;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .collection-grid__button:hover {
+    background-color: #000;
+    color: #fff;
+  }
+
+  @media (max-width: 768px) {
+    .collection-grid {
+      grid-template-columns: 1fr;
+    }
+    .collection-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  }
+
+  /* Animations */
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Collection Grid",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Shop By Collection"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection_tile",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Choose Collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_image",
+          "label": "Override Collection Image (Optional)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection Grid",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}

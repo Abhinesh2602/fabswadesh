@@ -1,0 +1,127 @@
+{%- comment -%}
+  FULL Swiper + PhotoSwipe viewer integration in Shopify product page
+{%- endcomment -%}
+
+<!-- Swiper Styles -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+<!-- PhotoSwipe Styles -->
+{{ 'photoswipe.css' | asset_url | stylesheet_tag }}
+
+<style>
+  .swiper-container {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+  .swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .swiper-slide figure {
+    margin: 0;
+    width: 100%;
+    min-height: 480px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .swiper-button-next,
+  .swiper-button-prev {
+    color: #333;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .swiper-thumbs {
+    margin-top: 12px;
+  }
+  .swiper-thumbs .swiper-slide {
+    width: 80px;
+    height: auto;
+    opacity: 0.6;
+    cursor: pointer;
+  }
+  .swiper-thumbs .swiper-slide-thumb-active {
+    opacity: 1;
+    border: 2px solid #000;
+  }
+</style>
+
+<div class="photos">
+  <div class="photos__item photos__item--main" data-aos="fade">
+    <div class="swiper-container swiper-{{ section.id }}">
+      <div class="swiper-wrapper">
+        {%- for media in product.media -%}
+        {% if media.media_type == 'image' %}
+        <div class="swiper-slide">
+          <figure class="product__photo-container">
+            <a
+              href="{{ media | image_url: width: 2048 }}"
+              data-pswp-width="{{ media.width }}"
+              data-pswp-height="{{ media.height }}"
+              data-index="{{ forloop.index0 }}"
+              data-image-id="{{ media.id }}"
+              class="product__photo-wrapper"
+              style="padding-top:{{ 1 | divided_by: media.aspect_ratio | times: 100 }}%;"
+            >
+              <img
+                src="{{ media | image_url: width: 800 }}"
+                alt="{{ media.alt | escape }}"
+                width="{{ media.width }}"
+                height="{{ media.height }}"
+                loading="lazy"
+              >
+            </a>
+          </figure>
+        </div>
+        {% endif %}
+        {%- endfor -%}
+      </div>
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+    </div>
+    <div class="swiper-container swiper-thumbs swiper-thumbs-{{ section.id }}">
+      <div class="swiper-wrapper">
+        {%- for media in product.media -%}
+        {% if media.media_type == 'image' %}
+        <div class="swiper-slide">
+          <img src="{{ media | image_url: width: 120 }}" alt="{{ media.alt | escape }}">
+        </div>
+        {% endif %}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Swiper & PhotoSwipe Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+<script src="{{ 'photoswipe.min.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'photoswipe-ui-default.min.js' | asset_url }}" defer="defer"></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const thumbSwiper = new Swiper(".swiper-thumbs-{{ section.id }}", {
+      slidesPerView: 5,
+      spaceBetween: 8,
+      freeMode: true,
+      watchSlidesProgress: true,
+    });
+
+    const mainSwiper = new Swiper(".swiper-{{ section.id }}", {
+      slidesPerView: 1,
+      spaceBetween: 10,
+      loop: false,
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+      thumbs: {
+        swiper: thumbSwiper,
+      },
+    });
+  });
+</script>
+
+<!-- PhotoSwipe Markup -->
+{% render 'component-photoswipe' %}
