@@ -120,8 +120,31 @@
         swiper: thumbSwiper,
       },
     });
+
+    // PhotoSwipe launch code
+    var photoLinks = document.querySelectorAll('.product__photo-wrapper');
+    var items = Array.from(photoLinks).map(function(link) {
+      return {
+        src: link.getAttribute('href'),
+        w: parseInt(link.getAttribute('data-pswp-width')) || 800,
+        h: parseInt(link.getAttribute('data-pswp-height')) || 600,
+        title: link.querySelector('img') ? link.querySelector('img').alt : ''
+      };
+    });
+
+    photoLinks.forEach(function(link, idx) {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        var pswpElement = document.querySelectorAll('.pswp')[0];
+        var options = {
+          index: idx,
+          bgOpacity: 0.85,
+          showHideOpacity: true
+        };
+        var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
+        gallery.init();
+      });
+    });
   });
 </script>
 
-<!-- PhotoSwipe Markup -->
-{% render 'component-photoswipe' %}
