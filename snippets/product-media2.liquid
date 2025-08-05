@@ -151,7 +151,7 @@
         {%- for media in product.media -%}
         {% if media.media_type == 'image' %}
         <div class="swiper-slide">
-          <img src="{{ media | image_url: width: 120 }}" alt="{{ media.alt | escape }}">
+          <img src="{{ media | image_url: width: 120 }}" alt="{{ media.alt | escape }}" width="{{ media.width }}" height="{{ media.height }}">
         </div>
         {% endif %}
         {%- endfor -%}
@@ -161,7 +161,7 @@
 </div>
 
 <!-- Swiper & PhotoSwipe Scripts -->
-<script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+<script src="{{ 'swiper-bundle.min.js' | asset_url }}" defer="defer"></script>
 <script src="{{ 'photoswipe.min.js' | asset_url }}" defer="defer"></script>
 <script src="{{ 'photoswipe-ui-default.min.js' | asset_url }}" defer="defer"></script>
 
