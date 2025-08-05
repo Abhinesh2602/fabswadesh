@@ -2457,10 +2457,10 @@
           "dbb31813-2c26-4013-a98e-fe9a3fb8a781": {
             "type": "text",
             "settings": {
-              "logofooter": "shopify://shop_images/fabswadeshlogo.png",
+              "logofooter": "shopify://shop_images/Untitled_design_-_2025-06-06T133629.193.png",
               "widthlogofooter": 130,
               "title": "Fab Swadesh",
-              "text": "<ul style=\"line-height:1.6;\">\n    <li style=\"font-weight:200;\" class=\"mb-4\">\n        Find a location nearest<br> you. See <a href=\"#\" style=\"    text-decoration: underline;\n    text-underline-offset: 4px;\">Our Stores</a>\n    </li>\n    <li>\n        <div>\n<span style=\"font-weight:500;\">T:</span> + (08) 9055 0269</div>\n        <div>\n<span style=\"font-weight:500;\">E:</span> example@example.com</div>\n    </li>\n\n\n    \n</ul>",
+              "text": "<ul style=\"line-height:1.6;\">\n    <li style=\"font-weight:200;\" class=\"mb-4\">\n        Online Store<br>  <a href=\"#\" style=\"    text-decoration: underline;\n    text-underline-offset: 4px;\">fabswadesh.com</a>\n    </li>\n    <li>\n        <div>\n<span style=\"font-weight:500;\">T:</span> + (91) 9676891390</div>\n        <div>\n<span style=\"font-weight:500;\">E:</span> contact@fabswadesh.com</div>\n    </li>\n\n\n    \n</ul>",
               "show_social": false,
               "width": "25%"
             }
@@ -2719,20 +2719,28 @@
             "type": "image_slide",
             "settings": {
               "image": "shopify://shop_images/Brown_Bold_And_Bright_Dussehra_Sale_WhatsApp_Status_430_x_250_px_3.svg",
-              "image_mobile": "shopify://shop_images/Artistic_Creative_1.png"
+              "image_mobile": "shopify://shop_images/Untitled_design_-_2025-08-05T201444.311.png"
             }
           },
           "image_slide_VKYmjJ": {
             "type": "image_slide",
             "settings": {
               "image": "shopify://shop_images/Brown_Bold_And_Bright_Dussehra_Sale_WhatsApp_Status_430_x_250_px_2.svg",
-              "image_mobile": "shopify://shop_images/Artistic_Creative.png"
+              "image_mobile": "shopify://shop_images/Untitled_design_-_2025-08-05T201815.606.png"
+            }
+          },
+          "image_slide_hW7WqB": {
+            "type": "image_slide",
+            "settings": {
+              "image": "shopify://shop_images/Green_Brown_Minimalist_Fashion_Boutique_Page_Website_Banner_430_x_250_mm_1.png",
+              "image_mobile": "shopify://shop_images/Green_Brown_Minimalist_Fashion_Boutique_Page_Website_Banner_430_x_250_mm.png"
             }
           }
         },
         "block_order": [
           "image_slide_taMETQ",
-          "image_slide_VKYmjJ"
+          "image_slide_VKYmjJ",
+          "image_slide_hW7WqB"
         ],
         "settings": {}
       }
