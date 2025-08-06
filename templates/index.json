@@ -87,63 +87,63 @@
           "type": "collection_tile",
           "settings": {
             "collection": "silk-dupatta",
-            "custom_image": "shopify://shop_images/BIG_2.png"
+            "custom_image": "shopify://shop_images/Handloom_Cotton_Saree_5.png"
           }
         },
         "collection_tile_9wbUnL": {
           "type": "collection_tile",
           "settings": {
             "collection": "dress-material",
-            "custom_image": "shopify://shop_images/BIG_3.png"
+            "custom_image": "shopify://shop_images/Handloom_Cotton_Saree_4.png"
           }
         },
         "collection_tile_4rNikV": {
           "type": "collection_tile",
           "settings": {
             "collection": "pen-kalamkari-dupatta",
-            "custom_image": "shopify://shop_images/BIG_1.png"
+            "custom_image": "shopify://shop_images/Kalamkari_Dupatta.png"
           }
         },
         "collection_tile_T3Kx7x": {
           "type": "collection_tile",
           "settings": {
             "collection": "shimmer-sarees",
-            "custom_image": "shopify://shop_images/BIG_1079_x_1079_px.png"
+            "custom_image": "shopify://shop_images/Handloom_Cotton_Saree_3.png"
           }
         },
         "collection_tile_kKB8Vj": {
           "type": "collection_tile",
           "settings": {
             "collection": "kalamkari-sarees",
-            "custom_image": "shopify://shop_images/BIG.png"
+            "custom_image": "shopify://shop_images/Handloom_Cotton_Saree_6.png"
           }
         },
         "collection_tile_mr3gRa": {
           "type": "collection_tile",
           "settings": {
             "collection": "kota-sarees",
-            "custom_image": "shopify://shop_images/BIG_1079_x_1079_px_1.png"
+            "custom_image": "shopify://shop_images/Handloom_Cotton_Saree_2.png"
           }
         },
         "collection_tile_GxjKrz": {
           "type": "collection_tile",
           "settings": {
             "collection": "trendy-fusion-collection",
-            "custom_image": "shopify://shop_images/BIG_1079_x_1079_px_2.png"
+            "custom_image": "shopify://shop_images/Handloom_Cotton_Saree_1.png"
           }
         },
         "collection_tile_ADRTXp": {
           "type": "collection_tile",
           "settings": {
             "collection": "cotton-saree-1",
-            "custom_image": "shopify://shop_images/BIG_1079_x_1079_px_3.png"
+            "custom_image": "shopify://shop_images/Handloom_Cotton_Saree.png"
           }
         },
         "collection_tile_aEJeqD": {
           "type": "collection_tile",
           "settings": {
             "collection": "shimmer-saree-collection",
-            "custom_image": "shopify://shop_images/Your_paragraph_text_6.png"
+            "custom_image": "shopify://shop_images/Kalamkari_Dupatta_2.png"
           }
         }
       },
