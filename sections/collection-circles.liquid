@@ -8,10 +8,7 @@
       {% assign collection = block.settings.collection %}
       {% if collection != blank %}
         <a href="{{ collection.url }}" class="collection-circle-item">
-          <div
-            class="circle-image"
-            style="background-image: url('{{ collection.image | image_url: width: 400 }}');"
-          ></div>
+          <div class="circle-image" style="background-image: url('{{ collection.image | image_url: width: 400 }}');"></div>
           <p class="collection-title">{{ collection.title }}</p>
         </a>
       {% endif %}
@@ -20,45 +17,73 @@
 </div>
 
 <style>
-    .collection-circles-wrapper {
-      padding-left:10px;
-      padding-right:10px;
-      padding-top:14px;
-      padding-bottom:20px;
-      text-align: center;
-      background: #dbcaca;
+
+  .collection-circles-wrapper {
+    padding: 14px 10px 20px;
+    text-align: center;
+    background: #dbcaca;
+    position: sticky;
+    top: 150px;
+    z-index: 20;
+  }
+
+  /* Ensure parent elements don't interfere with sticky positioning */
+  #shopify-section-collection-circles {
+    position: relative;
+    z-index: 99;
+  }
+
+  .collection-circles-heading {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .collection-circles-grid {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+  }
+
+  .collection-circle-item {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .circle-image {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center center;
+    margin: auto;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  @media (min-width: 1025px) {
+    .collection-circle-item:hover {
+      transform: translateY(-5px);
     }
 
-    .collection-circles-heading {
-      font-size: 1.8rem;
-      margin-bottom: 1.5rem;
+    .collection-circle-item:hover .circle-image {
+      transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
     }
 
-    .collection-circles-grid {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
+    .collection-circle-item:hover .collection-title {
+      color: #000;
+      transform: translateY(2px);
     }
+  }
 
-    .collection-circle-item {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    .circle-image {
-      width: 160px;
-      height: 160px;
-      border-radius: 50%;
-      background-size: cover;
-      background-position: center center;
-      margin: auto;
-    }
-
-    .collection-title {
-      margin-top: 0.5rem;
-      font-weight: 500;
-      font-size:20px
-    }
+  .collection-title {
+    transition: all 0.3s ease-in-out;
+    margin-top: 0.5rem;
+    font-weight: 500;
+    font-size: 20px
+  }
 
   @media (max-width: 1200px) {
 
@@ -78,12 +103,12 @@
     }
 
     .collection-title {
-      font-size:14px
+      font-size: 14px
     }
 
   }
 
-    @media (max-width: 767px) {
+  @media (max-width: 767px) {
 
     .collection-circles-heading {
       font-size: 1.2rem;
@@ -105,14 +130,13 @@
     }
 
     .collection-title {
-      font-size:14px
+      font-size: 14px
     }
 
   }
 
- 
 
-    @media (max-width: 500px) {
+  @media (max-width: 500px) {
 
     .collection-circles-heading {
       font-size: 1.2rem;
@@ -134,13 +158,13 @@
     }
 
     .collection-title {
-      font-size:10px
+      font-size: 10px
     }
 
   }
 
-  
-    @media (max-width: 410px) {
+
+  @media (max-width: 410px) {
 
     .collection-circles-heading {
       font-size: 1.2rem;
@@ -162,43 +186,43 @@
     }
 
     .collection-title {
-      font-size:10px
+      font-size: 10px
     }
 
   }
 </style>
 
 {% schema %}
-{
-  "name": "Collection Circles",
-  "tag": "section",
-  "settings": [
-    {
-      "type": "text",
-      "id": "title",
-      "label": "Heading",
-      "default": "Shop by Category"
-    }
-  ],
-  "blocks": [
-    {
-      "type": "collection",
-      "name": "Collection",
-      "settings": [
-        {
-          "type": "collection",
-          "id": "collection",
-          "label": "Choose a collection"
-        }
-      ]
-    }
-  ],
-  "max_blocks": 12,
-  "presets": [
-    {
-      "name": "Collection Circles",
-      "category": "Custom"
-    }
-  ]
-}
+  {
+    "name": "Collection Circles",
+    "tag": "section",
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Heading",
+        "default": "Shop by Category"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "collection",
+        "name": "Collection",
+        "settings": [
+          {
+            "type": "collection",
+            "id": "collection",
+            "label": "Choose a collection"
+          }
+        ]
+      }
+    ],
+    "max_blocks": 12,
+    "presets": [
+      {
+        "name": "Collection Circles",
+        "category": "Custom"
+      }
+    ]
+  }
 {% endschema %}

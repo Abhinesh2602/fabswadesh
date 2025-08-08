@@ -16,9 +16,21 @@
       </div>
 
       <!-- 2. Mobile Search -->
-      <form action="{{ routes.search_url }}" method="get" role="search" class="fs-header-search-mobile position-relative">
-        <input type="search" name="q" class="fs-search-input-mobile-with-button" placeholder="Search..." aria-label="Search">
-        <button type="submit" class="fs-search-button-inside" aria-label="Search">
+      <form
+        action="{{ routes.search_url }}"
+        method="get"
+        role="search"
+        class="fs-header-search-mobile position-relative">
+        <input
+          type="search"
+          name="q"
+          class="fs-search-input-mobile-with-button"
+          placeholder="Search..."
+          aria-label="Search">
+        <button
+          type="submit"
+          class="fs-search-button-inside"
+          aria-label="Search">
           {% render 'icon-search' %}
         </button>
       </form>
@@ -34,20 +46,32 @@
     <div class="d-none d-lg-flex justify-content-between align-items-center w-100 px-3">
       <!-- Left: Search + Localization -->
       <div class="d-flex align-items-center">
-        <form action="{{ routes.search_url }}" method="get" role="search" class="fs-header-search d-flex align-items-center me-3">
-          <input type="search" name="q" class="fs-search-input me-2" placeholder="Search..." aria-label="Search">
-          <button type="submit" class="fs-search-button" aria-label="Search">
+        <form
+          action="{{ routes.search_url }}"
+          method="get"
+          role="search"
+          class="fs-header-search d-flex align-items-center me-3">
+          <input
+            type="search"
+            name="q"
+            class="fs-search-input me-2"
+            placeholder="Search..."
+            aria-label="Search">
+          <button
+            type="submit"
+            class="fs-search-button"
+            aria-label="Search">
             {% render 'icon-search' %}
           </button>
         </form>
 
         {%- liquid
           assign enable_image = section.settings.enable_image
-          assign enable_name = section.settings.enable_name 
+          assign enable_name = section.settings.enable_name
           if section.settings.e_hd_currency and localization.available_countries.size > 1
             render 'localization' id: 'HeaderCountryForm', enable_image: enable_image, enable_name: enable_name
           endif
-          if section.settings.enable_language_selector and localization.available_languages.size > 1 
+          if section.settings.enable_language_selector and localization.available_languages.size > 1
             render 'localization-language', id: 'HeaderLanguageForm', enable_name: enable_name
           endif
         -%}
@@ -68,9 +92,10 @@
     assign main_linklist = section.settings.main_linklist
     assign blocks = section.blocks
   -%}
-  {%- render 'block-menu', main_linklist: main_linklist, blocks: blocks -%}
+  {%- render 'block-menu'
+    , main_linklist: main_linklist
+    , blocks: blocks -%}
 </div>
 
 <!-- ✅ STYLES -->
-<style>
-</style>
+<style></style>
