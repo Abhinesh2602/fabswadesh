@@ -1,35 +1,89 @@
 <!-- cart-template.liquid -->
 <style>
-  .js-qty__adjust{
+  .js-qty__adjust {
     width: 30px;
   }
-  .js-qty__input{
+  .js-qty__input {
     background-color: #fff;
   }
-  .cart-right{
+  .cart-right {
     padding: 2rem 2.2rem;
   }
-  @media(max-width:749px){
-    .cart-right{
+  @media(max-width: 749px) {
+    .cart-right {
       padding: 2rem 1rem;
     }
   }
-  #cart-payment-methods li svg{
+  #cart-payment-methods li svg {
     height: auto;
     width: 38px;
   }
-  .qty-mobile{
+  .qty-mobile {
     width: 120px;
     margin: 8px 0;
   }
-  .qty-mobile .js-qty__input{
+  .qty-mobile .js-qty__input {
     height: 40px;
   }
-  .block-coupon-cart .card-coupon{
-    border-top:none;
-    border-bottom-color:rgba(var(--g-color-heading-rgb),0.1);
+
+  /* Quantity selector styling */
+  .quantity-selector {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: white;
+    max-width: 120px;
   }
-  .block-coupon-cart .form-control{
+
+  .quantity-btn {
+    background: #f8f9fa;
+    border: none;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    transition: background-color 0.2s;
+  }
+
+  .quantity-btn:hover {
+    background: #e9ecef;
+  }
+
+  .quantity-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .quantity-input {
+    border: none;
+    width: 56px;
+    height: 32px;
+    text-align: center;
+    font-size: 14px;
+    background: white;
+    outline: none;
+  }
+
+  .quantity-input::-webkit-outer-spin-button,
+  .quantity-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .quantity-input[type=number] {
+    -moz-appearance: textfield;
+  }
+  .block-coupon-cart .card-coupon {
+    border-top: none;
+    border-bottom-color: rgba(var(--g-color-heading-rgb), 0.1);
+  }
+  .block-coupon-cart .form-control {
     width: 100%;
     border-radius: var(--g-input-radius);
     background-color: white;
@@ -41,13 +95,49 @@
     line-height: var(--g-input-height);
     padding: 0 1rem;
   }
+  .cart__image {
+    width: 200px;
+    height: 160px;
+    display: block;
+    overflow: hidden;
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+  .cart__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    background-color: #f8f9fa;
+  }
+  @media (max-width: 991px) {
+    .cart__image {
+      width: 180px;
+      height: 144px;
+    }
+  }
+  @media (max-width: 767px) {
+    .cart__image {
+      min-width: 100px;
+      width: 120px;
+      height: auto;
+      min-height: 100px;
+    }
+    .cart__cell--image .d-flex {
+      align-items: flex-start;
+    }
+  }
 </style>
 <div data-section-id="{{ section.id }}" data-section-type="cart">
   <div class="container">
     {% if cart.item_count > 0 %}
 
       <h2 class="text-left h3 mb-lg-5 mb-3 mt-3">{{ 'cart.general.title' | t }}</h2>
-      <form action="/cart" method="post" novalidate class="cart pb-5 mb-4">
+      <form
+        action="/cart"
+        method="post"
+        novalidate
+        class="cart pb-5 mb-4">
         <div class="row">
           <div class="col-lg-8 pr-lg-5">
             <table class="responsive-table cart-table">
@@ -62,12 +152,14 @@
                     <td class="cart__cell--image">
                       <div class="d-flex">
                         <a href="{{ item.url | within: collections.all }}" class="cart__image ">
-                          <img src="{{ item | image_url: width: 240 }}" alt="{{ item.title | escape }}"
+                          <img
+                            src="{{ item | image_url: width: 600 }}"
+                            alt="{{ item.title | escape }}"
                             loading="lazy"
-                            width="{{ item.width }}"
-                            height="{{ item.height }}">
+                            width="200"
+                            height="160">
                         </a>
-                        <div class="d-flex d-lg-none pl-4 flex-column text-left">
+                        <div class="d-flex d-lg-none flex-column text-left">
                           <a href="{{ item.url }}" class="h6 text-body">
                             {{ item.product.title }}
                           </a>
@@ -87,13 +179,15 @@
                                 {% else %}
                                   {{ p.last }}
                                 {% endif %}
-        
+
                               {% endunless %}
                             {% endfor %}
                           {% endif %}
                           <div>
                             {% if item.original_line_price != item.line_price %}
-                              <small class="cart-item__original-price cart__item-total"><s>{{ item.original_line_price | money }}</s></small><br>
+                              <small class="cart-item__original-price cart__item-total">
+                                <s>{{ item.original_line_price | money }}</s>
+                              </small><br>
                             {% endif %}
                             <span class="cart__item-total text-body">
                               {{ item.line_price | money }}
@@ -104,7 +198,25 @@
                           </div>
                           <div class="qty-mobile">
                             <label for="Updates_{{ item.key }}" class="cart__quantity-label hide">{{ 'cart.label.quantity' | t }}</label>
-                            <input type="number" name="updates[]" id="Updates_{{ item.key }}" class="cart__quantity" value="{{ item.quantity }}" min="0" data-line="{{ forloop.index }}" aria-label="{{ 'cart.label.quantity' | t }}">
+                            <div class="quantity-selector">
+                              <button
+                                type="button"
+                                class="quantity-btn quantity-decrease"
+                                data-line="{{ forloop.index }}">−</button>
+                              <input
+                                type="number"
+                                name="updates[]"
+                                id="Updates_{{ item.key }}"
+                                class="quantity-input"
+                                value="{{ item.quantity }}"
+                                min="0"
+                                data-line="{{ forloop.index }}"
+                                aria-label="{{ 'cart.label.quantity' | t }}">
+                              <button
+                                type="button"
+                                class="quantity-btn quantity-increase"
+                                data-line="{{ forloop.index }}">+</button>
+                            </div>
                           </div>
                           <p>
                             <a class="small" href="/cart/change?line={{ forloop.index }}&amp;quantity=0">{{ 'cart.general.remove' | t }}</a>
@@ -119,7 +231,7 @@
                       {% unless item.variant.title contains 'Default' %}
                         <p>{{ item.variant.title }}</p>
                       {% endunless %}
-    
+
                       {%- liquid
                         assign property_size = item.properties | size
                       -%}
@@ -133,22 +245,42 @@
                             {% else %}
                               {{ p.last }}
                             {% endif %}
-    
+
                           {% endunless %}
                         {% endfor %}
                       {% endif %}
-    
+
                       <p>
                         <a class="small" href="/cart/change?line={{ forloop.index }}&amp;quantity=0">{{ 'cart.general.remove' | t }}</a>
                       </p>
                     </td>
                     <td class="cart__cell--quantity d-none d-lg-table-cell">
                       <label for="Updates_{{ item.key }}" class="cart__quantity-label hide">{{ 'cart.label.quantity' | t }}</label>
-                      <input type="number" name="updates[]" id="Updates_{{ item.key }}" class="cart__quantity" value="{{ item.quantity }}" min="0" data-line="{{ forloop.index }}" aria-label="{{ 'cart.label.quantity' | t }}">
+                      <div class="quantity-selector">
+                        <button
+                          type="button"
+                          class="quantity-btn quantity-decrease"
+                          data-line="{{ forloop.index }}">−</button>
+                        <input
+                          type="number"
+                          name="updates[]"
+                          id="Updates_{{ item.key }}"
+                          class="quantity-input"
+                          value="{{ item.quantity }}"
+                          min="0"
+                          data-line="{{ forloop.index }}"
+                          aria-label="{{ 'cart.label.quantity' | t }}">
+                        <button
+                          type="button"
+                          class="quantity-btn quantity-increase"
+                          data-line="{{ forloop.index }}">+</button>
+                      </div>
                     </td>
                     <td class="cart__cell--total d-none d-lg-table-cell">
                       {% if item.original_line_price != item.line_price %}
-                        <small class="cart-item__original-price cart__item-total"><s>{{ item.original_line_price | money }}</s></small><br>
+                        <small class="cart-item__original-price cart__item-total">
+                          <s>{{ item.original_line_price | money }}</s>
+                        </small><br>
                       {% endif %}
                       <span class="cart__item-total text-body">
                         {{ item.line_price | money }}
@@ -165,55 +297,69 @@
               {% assign product_gift = settings.product_gift %}
               {%- if settings.gift_wrapping_enable and product_gift != blank -%}
                 <div class="d-flex align-items-center gap-2 py-4 border-top giftwrap flex-lg-row flex-column">
-                <p class="font-family-2 mb-0 d-flex align-items-center gap-2">{% render 'icon-gift' %} {{ 'cart.gift.description' | t }} {{ product_gift.price | money }}</p>
-                <div>
-                <a class="add-gift__btn add-gift btn btn-outline btn-sm " href="{{ product_gift.url }}" data-id="{{ product_gift.selected_or_first_available_variant.id }}">
-                  <div class="product-card__loading spinner-border" role="status"></div>
-                  <span>{{ 'cart.gift.save' | t }}</span></a>
+                  <p class="font-family-2 mb-0 d-flex align-items-center gap-2">{% render 'icon-gift' %} {{ 'cart.gift.description' | t }} {{ product_gift.price | money }}</p>
+                  <div>
+                    <a
+                      class="add-gift__btn add-gift btn btn-outline btn-sm "
+                      href="{{ product_gift.url }}"
+                      data-id="{{ product_gift.selected_or_first_available_variant.id }}">
+                      <div class="product-card__loading spinner-border" role="status"></div>
+                      <span>{{ 'cart.gift.save' | t }}</span>
+                    </a>
+                  </div>
                 </div>
-                </div> 
               {%- endif -%}
               {% render 'shipping-calculator' %}
             </div>
           </div>
           <div class="col-lg-4">
             <div class="cart-right bg-gray-01">
-            {% render 'free-shipping' %}
-            <div class="row cart__row">
-              {% if section.settings.cart_notes_enable %}
-              <div class="col-12">
-                <label for="CartSpecialInstructions">{{ 'cart.general.note' | t }}</label>
-                <textarea name="note" id="CartSpecialInstructions" class="cart__note">{{ cart.note }}</textarea>
-              </div>
-              {% endif %}
-              {%- if settings.coupon_code_enable -%}
-                <div class="block-coupon col-12 block-coupon-cart">
-                  <discount-code >
-                    {%- if settings.coupon_code_title != blank -%}
-                    <div id="list-coupon" class="pt-2 mb-3 text-left">
-                      <div class="card-coupon">
-                        <h6> {{ settings.coupon_code_title }} </h6>
-                        <div class="pb-3 border-bottom mb-3">
-                          {{ settings.coupon_code_content }}
-                        </div>
-                        <div class="d-flex flex-column align-items-center">
-                          <div class="mb-4 w-100 text-left">
-                            <label class="mb-1" for="discount-code-input">{{ 'cart.general.coupon_title' | t }}</label>
-                            <div class="d-flex w-100 gap-2">
-                              <input class="form-control" type="text" id="discount-code-input" autocomplete="on" value="">
-                              <div>
-                                <span id="apply-discount-btn" class="btn btn-theme">{{ 'cart.general.save' | t }}</span>
+              {% render 'free-shipping' %}
+              <div class="row cart__row">
+                {% if section.settings.cart_notes_enable %}
+                  <div class="col-12">
+                    <label for="CartSpecialInstructions">{{ 'cart.general.note' | t }}</label>
+                    <textarea
+                      name="note"
+                      id="CartSpecialInstructions"
+                      class="cart__note">{{ cart.note }}</textarea>
+                  </div>
+                {% endif %}
+                {%- if settings.coupon_code_enable -%}
+                  <div class="block-coupon col-12 block-coupon-cart">
+                    <discount-code>
+                      {%- if settings.coupon_code_title != blank -%}
+                        <div id="list-coupon" class="pt-2 mb-3 text-left">
+                          <div class="card-coupon">
+                            <h6>
+                              {{ settings.coupon_code_title }}
+                            </h6>
+                            <div class="pb-3 border-bottom mb-3">
+                              {{ settings.coupon_code_content }}
+                            </div>
+                            <div class="d-flex flex-column align-items-center">
+                              <div class="mb-4 w-100 text-left">
+                                <label class="mb-1" for="discount-code-input">{{ 'cart.general.coupon_title' | t }}</label>
+                                <div class="d-flex w-100 gap-2">
+                                  <input
+                                    class="form-control"
+                                    type="text"
+                                    id="discount-code-input"
+                                    autocomplete="on"
+                                    value="">
+                                  <div>
+                                    <span id="apply-discount-btn" class="btn btn-theme">{{ 'cart.general.save' | t }}</span>
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
-                  {%- endif -%}
-                  </discount-code>
-                </div>
-                <script>
-                  class DiscountCode extends HTMLElement {
+                      {%- endif -%}
+                    </discount-code>
+                  </div>
+                  <script>
+                                      class DiscountCode extends HTMLElement {
                       constructor() {
                         super();
                         this.couponCodeValue = document.getElementById('discount-code-input'); 
@@ -237,21 +383,21 @@
                       }
                     }
                     customElements.define('discount-code', DiscountCode);
-                </script>
-              {%- endif -%}
-              <div class="col text-left">
-                <div class="flex align-items-center mt-2">
-                 <span class="mr-auto">{{ 'cart.general.total' | t }}</span>
-                  <p class="h4 cart__subtotal text-body mt-0" id="CartSubtotal">{{ cart.total_price | money }}</p>
-                </div>
-                
-                <p id="cartDiscountTotal txt-body-70">
-                  {% if cart.total_discounts > 0 %}
-                  {% assign savings = cart.total_discounts | money %}
-                  {{ 'cart.general.savings_html' | t: price: savings }}
-                  {% endif %}
-                </p>
-                {%- capture taxes_shipping_checkout -%}
+                  </script>
+                {%- endif -%}
+                <div class="col text-left">
+                  <div class="flex align-items-center mt-2">
+                    <span class="mr-auto">{{ 'cart.general.total' | t }}</span>
+                    <p class="h4 cart__subtotal text-body mt-0" id="CartSubtotal">{{ cart.total_price | money }}</p>
+                  </div>
+
+                  <p id="cartDiscountTotal txt-body-70">
+                    {% if cart.total_discounts > 0 %}
+                      {% assign savings = cart.total_discounts | money %}
+                      {{ 'cart.general.savings_html' | t: price: savings }}
+                    {% endif %}
+                  </p>
+                  {%- capture taxes_shipping_checkout -%}
                 {%- if shop.taxes_included and shop.shipping_policy.body != blank -%}
                 {{ 'cart.general.taxes_included_and_shipping_policy_html' | t: link: shop.shipping_policy.url }}
                 {%- elsif shop.taxes_included -%}
@@ -262,34 +408,43 @@
                 {{ 'cart.general.taxes_and_shipping_at_checkout' | t }}
                 {%- endif -%}
                 {%- endcapture -%}
-    
-                <p class="cart__taxes rte txt-body-70">{{ taxes_shipping_checkout }}</p>
-                <button type="submit" name="update" class="btn--secondary update-cart">{{ 'cart.general.update' | t }}</button>
-                <button type="submit" name="checkout" class="btn btn-theme gradient-theme btn-cart-checkout w-100">{{ 'cart.general.checkout' | t }}</button>
-                
-                {%- if shop.enabled_payment_types != empty -%}
-                  <p class="small txt-body-70 mt-4 mb-0 text-center">{{ 'cart.general.accept' | t }}</p>
-                  <ul id="cart-payment-methods" class="list-inline payment-icons text-center">
-                    {%- for type in shop.enabled_payment_types -%}
-                    <li class="list-inline-item">
-                      {{ type | payment_type_svg_tag: class: 'payment-icon' }}
-                    </li>
-                    {%- endfor -%}
-                  </ul>
-                {%- endif -%}
-                {% if settings.safe_checkout_cart != blank %}
-                <div class="cart-safe-checkout">
-                  <img class="lazyload" loading="lazy" width="{{ settings.safe_checkout_cart.width }}" height="{{ settings.safe_checkout_cart.height }}"
-                    src="{{ settings.safe_checkout_cart | image_url: width: 1, height: 1 }}" 
-                    data-src="{{ settings.safe_checkout_cart | image_url: width: 300 }}"/>
+                  <p class="cart__taxes rte txt-body-70">{{ taxes_shipping_checkout }}</p>
+                  <button
+                    type="submit"
+                    name="update"
+                    class="btn--secondary update-cart">{{ 'cart.general.update' | t }}</button>
+                  <button
+                    type="submit"
+                    name="checkout"
+                    class="btn btn-theme gradient-theme btn-cart-checkout w-100">{{ 'cart.general.checkout' | t }}</button>
+
+                  {%- if shop.enabled_payment_types != empty -%}
+                    <p class="small txt-body-70 mt-4 mb-0 text-center">{{ 'cart.general.accept' | t }}</p>
+                    <ul id="cart-payment-methods" class="list-inline payment-icons text-center">
+                      {%- for type in shop.enabled_payment_types -%}
+                        <li class="list-inline-item">
+                          {{ type | payment_type_svg_tag: class: 'payment-icon' }}
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  {%- endif -%}
+                  {% if settings.safe_checkout_cart != blank %}
+                    <div class="cart-safe-checkout">
+                      <img
+                        class="lazyload"
+                        loading="lazy"
+                        width="{{ settings.safe_checkout_cart.width }}"
+                        height="{{ settings.safe_checkout_cart.height }}"
+                        src="{{ settings.safe_checkout_cart | image_url: width: 1, height: 1 }}"
+                        data-src="{{ settings.safe_checkout_cart | image_url: width: 300 }}" />
+                    </div>
+                  {% endif %}
                 </div>
-                {% endif %}
               </div>
             </div>
           </div>
-          </div>
         </div>
-        
+
       </form>
     {% else %}
       <div class="page-empty text-center">
@@ -302,7 +457,7 @@
         <p class="cart--cookie-message">{{ 'cart.general.cookies_required' | t }}</p>
       </div>
     {% endif %}
-    
+
   </div>
   <script id="CartProductTemplate" type="text/template">
     {% raw %}
@@ -311,9 +466,9 @@
         <td class="cart__cell--image text-center">
           <div class="d-flex">
             <a href="{{ url }}" class="cart__image">
-              <img src="{{ img }}" alt="{{ name }}">
+              <img src="{{ img }}" alt="{{ name }}" width="200" height="160">
             </a>
-            <div class="d-flex d-lg-none pl-4 flex-column text-left">
+            <div class="d-flex d-lg-none flex-column text-left">
               <a href="{{ url }}" class="h5">
                 {{{ name }}}
               </a>
@@ -401,18 +556,74 @@
   {{ cart | json }}
 </script>
 
+<script>
+  // Quantity increase/decrease functionality
+  document.addEventListener('DOMContentLoaded', function() {
+  const quantityButtons = document.querySelectorAll('.quantity-btn');
+  
+  quantityButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      const isIncrease = this.classList.contains('quantity-increase');
+      const line = this.getAttribute('data-line');
+      const input = this.parentNode.querySelector('.quantity-input');
+      let currentValue = parseInt(input.value) || 0;
+      
+      if (isIncrease) {
+        currentValue++;
+      } else {
+        currentValue = Math.max(0, currentValue - 1);
+      }
+      
+      input.value = currentValue;
+      
+      // Update cart
+      updateCartQuantity(line, currentValue);
+    });
+  });
+  
+  // Handle direct input changes
+  document.querySelectorAll('.quantity-input').forEach(input => {
+    input.addEventListener('change', function() {
+      const line = this.getAttribute('data-line');
+      const quantity = Math.max(0, parseInt(this.value) || 0);
+      this.value = quantity;
+      updateCartQuantity(line, quantity);
+    });
+  });
+  
+  function updateCartQuantity(line, quantity) {
+    const formData = new FormData();
+    formData.append('line', line);
+    formData.append('quantity', quantity);
+    
+    fetch('/cart/change.js', {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => response.json())
+    .then(cart => {
+      // Reload the page to update cart totals
+      window.location.reload();
+    })
+    .catch(error => {
+      console.error('Error updating cart:', error);
+      window.location.reload();
+    });
+  }
+  });
+</script>
 
 
 {% schema %}
-{
-  "name": "Cart pages",
-  "settings": [
-    {
-      "type": "checkbox",
-      "id": "cart_notes_enable",
-      "label": "Enable order notes",
-      "default": true
-    }
-  ]
-}
+  {
+    "name": "Cart pages",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "cart_notes_enable",
+        "label": "Enable order notes",
+        "default": true
+      }
+    ]
+  }
 {% endschema %}

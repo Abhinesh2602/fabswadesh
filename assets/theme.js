@@ -4959,10 +4959,40 @@ theme.miniCart = (function () {
 
   //Keep popup when click cart / UX
   $(document).on("click", cartToggle, function () {
-    $(this).parent(miniCart).toggleClass("active");
+    var $miniCart = $(this).parent(miniCart);
+    $miniCart.toggleClass("active");
+
+    // Prevent body scroll when cart is open
+    if ($miniCart.hasClass("active")) {
+      $("body").addClass("cart-open");
+    } else {
+      $("body").removeClass("cart-open");
+    }
   });
+
   $(document).on("click", ".overlaycart, .close", function () {
     $(this).parents(miniCart).removeClass("active");
+    $("body").removeClass("cart-open");
+  });
+
+  // Prevent scroll chaining from cart to body on touch devices
+  $(document).on("touchmove", ".js-mini-cart-content", function (e) {
+    var element = this;
+    var scrollTop = element.scrollTop;
+    var scrollHeight = element.scrollHeight;
+    var height = element.offsetHeight;
+    var delta =
+      e.originalEvent.touches[0].clientY -
+      (this.startY || e.originalEvent.touches[0].clientY);
+
+    this.startY = e.originalEvent.touches[0].clientY;
+
+    if (
+      (delta > 0 && scrollTop === 0) ||
+      (delta < 0 && scrollTop + height >= scrollHeight)
+    ) {
+      e.preventDefault();
+    }
   });
 
   // gen minicart when load page
