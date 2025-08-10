@@ -90,83 +90,96 @@
     height: 65px;
     width: auto;
   }
-    .sticky-cart-select{
-      background:var(--sticky-cart-mix2);
-      text-transform: uppercase;
-      font-size: 12px;
-      position: relative;
-    }
-    .sticky-cart-select select{
-      background: transparent;
-      font-weight:bold;
-      padding: 10px;
-      font-size: 12px;
-      text-transform: uppercase;
-      position: relative;
-    }
-    
-    /* Custom dropdown container */
-    .custom-dropdown {
-      position: relative;
-      display: inline-block;
-    }
-    
-    .custom-dropdown-trigger {
-      background: transparent;
-      border: 1px solid #ccc;
-      padding: 10px;
-      font-size: 12px;
-      text-transform: uppercase;
-      font-weight: bold;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      min-width: 120px;
-    }
-    
-    .custom-dropdown-trigger::after {
-      content: '▲';
-      margin-left: 8px;
-      font-size: 10px;
-    }
-    
-    .custom-dropdown-options {
-      position: absolute;
-      bottom: 100%;
-      left: 0;
-      right: 0;
-      background: white;
-      border: 1px solid #ccc;
-      border-bottom: none;
-      max-height: 200px;
-      overflow-y: auto;
-      z-index: 1000;
-      display: none;
-      box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
-    }
-    
-    .custom-dropdown.active .custom-dropdown-options {
-      display: block;
-    }
-    
-    .custom-dropdown-option {
-      padding: 10px;
-      cursor: pointer;
-      font-size: 12px;
-      text-transform: uppercase;
-      font-weight: bold;
-      background: transparent;
-    }
-    
-    .custom-dropdown-option:hover,
-    .custom-dropdown-option.selected {
-      background: var(--sticky-cart-mix2);
-    }
-    
-    .custom-dropdown-option:not(:last-child) {
-      border-bottom: 1px solid #eee;
-    }  #js-sticky-quantity {
+  .sticky-cart-select {
+    background: var(--sticky-cart-mix2);
+    text-transform: uppercase;
+    font-size: 12px;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    min-width: 160px
+  }
+
+
+  .stickyLabel {
+    margin: 0;
+    padding-left: 10px;
+  }
+
+  .sticky-cart-select select {
+    background: transparent;
+    font-weight: bold;
+    padding: 10px;
+    font-size: 12px;
+    text-transform: uppercase;
+    position: relative;
+  }
+
+  /* Custom dropdown container */
+  .custom-dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  .custom-dropdown-trigger {
+    background: transparent;
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-size: 12px;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 60px;
+  }
+
+  .custom-dropdown-trigger::after {
+    content: '▲';
+    margin-left: 8px;
+    font-size: 10px;
+  }
+
+  .custom-dropdown-options {
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #ccc;
+    border-bottom: none;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    display: none;
+    box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .custom-dropdown.active .custom-dropdown-options {
+    display: block;
+  }
+
+  .custom-dropdown-option {
+    padding: 10px;
+    cursor: pointer;
+    font-size: 12px;
+    text-transform: uppercase;
+    font-weight: bold;
+    background: transparent;
+  }
+
+  .custom-dropdown-option:hover,
+  .custom-dropdown-option.selected {
+    background: var(--sticky-cart-mix2);
+  }
+
+  .custom-dropdown-option:not(:last-child) {
+    border-bottom: 1px solid #eee;
+  }
+  #js-sticky-quantity {
     max-width: 70px;
     font-weight: bold;
     text-align: center;
@@ -228,6 +241,11 @@
     .sticky-cart-select select {
       padding: 2px;
     }
+
+
+    .sticky-cart-select {
+      min-width: 60px;
+    }
   }
 </style>
 <div id="js-anchor-sticky-cart"></div>
@@ -252,9 +270,9 @@
       {%- unless product.has_only_default_variant -%}
         {%- for option in product.options_with_values -%}
           {% unless option.name == 'default' %}
-            <div class="sticky-cart-select px-lg-3 px-1 mx-1">
-              <label>{{ option.name }}</label>
-              
+            <div class="sticky-cart-select  ">
+              <label class="stickyLabel">{{ option.name }}</label>
+
               <!-- Custom dropdown that expands upward -->
               <div class="custom-dropdown" data-name="{{ option.name }}">
                 <div class="custom-dropdown-trigger" data-option-name="{{ option.name }}">
@@ -262,17 +280,19 @@
                 </div>
                 <div class="custom-dropdown-options">
                   {% for value in option.values %}
-                    <div class="custom-dropdown-option {% if option.selected_value == value %}selected{% endif %}" 
-                         data-value="{{ value | escape }}" 
-                         data-index="{{ forloop.index0 }}">
+                    <div
+                      class="custom-dropdown-option {% if option.selected_value == value %}selected{% endif %}"
+                      data-value="{{ value | escape }}"
+                      data-index="{{ forloop.index0 }}">
                       {{ value }}
                     </div>
                   {% endfor %}
                 </div>
               </div>
-              
+
               <!-- Hidden select for form functionality -->
-              <select style="display: none;"
+              <select
+                style="display: none;"
                 data-name="{{ option.name }}"
                 onchange="triggerOption(this)"
                 id="js-sticky-option-{{ forloop.index }}"
