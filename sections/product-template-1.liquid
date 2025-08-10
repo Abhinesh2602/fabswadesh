@@ -568,7 +568,15 @@
                 {% endunless %}
                 <select name="id" id="ProductSelect-{{ section.id }}" class="product-form__variants no-js">
                   {% for variant in product.variants %}
-                  <option {% if variant == current_variant %} selected="selected" {% endif %} data-sku="{{ variant.sku }}" value="{{ variant.id }}" {% unless variant.available %} disabled="disabled" {% endunless %}>
+                  <option 
+                    {% if variant == current_variant %} selected="selected" {% endif %} 
+                    data-sku="{{ variant.sku }}" 
+                    data-price="{{ variant.price | money }}"
+                    {% if variant.compare_at_price > variant.price %}
+                      data-compare-price="{{ variant.compare_at_price | money }}"
+                    {% endif %}
+                    value="{{ variant.id }}" 
+                    {% unless variant.available %} disabled="disabled" {% endunless %}>
                     {% if variant.available %}
                     {{ variant.title }} - {{ variant.price | money_with_currency }}
                     {% else %}
@@ -840,6 +848,53 @@
 {%- endif -%}
 
 {% javascript %}
+// Money format helper
+Shopify.formatMoney = function(cents, format) {
+  if (typeof cents === 'string') cents = cents.replace('.', '');
+  var value = '';
+  var patt = /\{\{\s*(\w+)\s*\}\}/;
+  var formatString = format || this.money_format;
+
+  function defaultTo(value, defaultValue) {
+    return value == null || value !== value ? defaultValue : value;
+  }
+
+  function formatWithDelimiters(number, precision, thousands, decimal) {
+    precision = defaultTo(precision, 2);
+    thousands = defaultTo(thousands, ',');
+    decimal = defaultTo(decimal, '.');
+
+    if (isNaN(number) || number == null) return 0;
+
+    number = (number / 100.0).toFixed(precision);
+
+    var parts = number.split('.'),
+        dollars = parts[0].replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1' + thousands),
+        cents = parts[1] ? decimal + parts[1] : '';
+
+    return dollars + cents;
+  }
+
+  switch(formatString.match(patt)[1]) {
+    case 'amount':
+      value = formatWithDelimiters(cents, 2);
+      break;
+    case 'amount_no_decimals':
+      value = formatWithDelimiters(cents, 0);
+      break;
+    case 'amount_with_comma_separator':
+      value = formatWithDelimiters(cents, 2, '.', ',');
+      break;
+    case 'amount_no_decimals_with_comma_separator':
+      value = formatWithDelimiters(cents, 0, '.', ',');
+      break;
+    case 'amount_no_decimals_with_space_separator':
+      value = formatWithDelimiters(cents, 0, ' ');
+      break;
+  }
+
+  return formatString.replace(patt, value);
+};
 
 var initPhotoSwipeFromDOM = function(gallerySelector) {
 
@@ -1264,7 +1319,7 @@ initPhotoSwipeFromDOM('.my-gallery');
       "min": 1,
       "max": 10,
       "step": 0.1,
-      "unit": "s",
+           "unit": "s",
       "label": "Delay time before show popup",
       "default": 3
     },
@@ -1989,12 +2044,176 @@ initPhotoSwipeFromDOM('.my-gallery');
 {% endunless %}
 
 <script>
-  // Override default values of shop.strings for each template.
-  // Alternate product templates can change values of
-  // add to cart button, sold out, and unavailable states here.
-  window.productStrings = {
-    addToCart: {{ 'products.product.add_to_cart' | t | json }},
-    soldOut: {{ 'products.product.sold_out' | t | json }},
-    unavailable: {{ 'products.product.unavailable' | t | json }}
+  document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('AddToCartForm-{{ section.id }}');
+    const variantSelect = document.getElementById('ProductSelect-{{ section.id }}');
+    const productJsonEl = document.getElementById('ProductJson-{{ section.id }}');
+    if (!form || !variantSelect || !productJsonEl) return;
+
+    const productData = JSON.parse(productJsonEl.textContent || productJsonEl.innerHTML);
+
+    function currentSelections() {
+      // Read current option values from radios/selects (works for swatches and dropdowns)
+      const opts = [null, null, null];
+      // Dropdowns created by OptionSelectors (if present)
+      form.querySelectorAll('.single-option-selector').forEach(function (sel) {
+        const idx = parseInt(sel.getAttribute('data-index') || sel.id.split('-').pop(), 10);
+        if (!isNaN(idx)) opts[idx] = sel.value;
+      });
+      // Radios / custom swatches named like options[Size], options[Length], etc.
+      form.querySelectorAll('[name^="options["]').forEach(function (input) {
+        if ((input.type === 'radio' && !input.checked)) return;
+        const name = input.name; // e.g., options[Length]
+        const label = name.substring(name.indexOf('[') + 1, name.indexOf(']')); // "Length"
+        // Map label to option position
+        const pos = productData.options.findIndex(o => o.toLowerCase() === label.toLowerCase());
+        if (pos > -1) opts[pos] = input.value;
+      });
+      return opts;
+    }
+
+    function findVariantByOptions(o1, o2, o3) {
+      return productData.variants.find(function (v) {
+        return (o1 == null || v.option1 === o1) &&
+               (o2 == null || v.option2 === o2) &&
+               (o3 == null || v.option3 === o3);
+      }) || null;
+    }
+
+    function syncVariantFromOptions() {
+      const [o1, o2, o3] = currentSelections();
+      const match = findVariantByOptions(o1, o2, o3);
+      if (!match) return;
+      if (variantSelect.value !== String(match.id)) {
+        variantSelect.value = String(match.id);
+        // Trigger OptionSelectors -> onVariantSelected callback
+        variantSelect.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+    }
+
+    // Listen to ANY change on option inputs (radios, selects, swatches)
+    form.addEventListener('change', function (e) {
+      if (e.target.matches('.single-option-selector, [name^="options["]')) {
+        syncVariantFromOptions();
+      }
+    });
+
+    // Initial sync (handles default selections on load)
+    syncVariantFromOptions();
+  });
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Get product data
+  var productDataScript = document.getElementById('ProductJson-{{ section.id }}');
+  if (!productDataScript) return;
+  var productData = JSON.parse(productDataScript.textContent);
+
+  var variantSelect = document.getElementById('ProductSelect-{{ section.id }}');
+  if (!variantSelect) return;
+
+  // Money formatting function
+  function formatMoney(cents) {
+    var value = (cents / 100).toLocaleString('{{ shop.locale }}', {
+      style: 'currency',
+      currency: '{{ shop.currency }}'
+    });
+    return value;
   }
+
+  // Function to update price and related elements
+  function updateProductInfo(variant) {
+    if (!variant) return;
+
+    // Update price
+    var priceEl = document.getElementById('ProductPrice-{{ section.id }}');
+    if (priceEl) {
+      priceEl.textContent = formatMoney(variant.price);
+      priceEl.setAttribute('content', (variant.price / 100).toString());
+    }
+
+    // Update compare price
+    var compareEl = document.getElementById('ComparePrice-{{ section.id }}');
+    var compareLi = compareEl ? compareEl.closest('li') : null;
+    
+    if (compareEl) {
+      if (variant.compare_at_price && variant.compare_at_price > variant.price) {
+        compareEl.textContent = formatMoney(variant.compare_at_price);
+        compareEl.style.display = '';
+        if (compareLi) compareLi.style.display = '';
+      } else {
+        compareEl.style.display = 'none';
+        if (compareLi) compareLi.style.display = 'none';
+      }
+    }
+
+    // Update SKU
+    var skuEl = document.querySelector('.js-variant-sku');
+    if (skuEl) {
+      skuEl.textContent = variant.sku || '';
+    }
+
+    // Update add to cart button
+    var addToCartBtn = document.getElementById('AddToCart-{{ section.id }}');
+    var addToCartText = document.getElementById('AddToCartText-{{ section.id }}');
+    
+    if (addToCartBtn && addToCartText) {
+      if (variant.available) {
+        addToCartBtn.disabled = false;
+        addToCartBtn.classList.remove('btn--sold-out');
+        addToCartText.textContent = {{ 'products.product.add_to_cart' | t | json }};
+      } else {
+        addToCartBtn.disabled = true;
+        addToCartBtn.classList.add('btn--sold-out');
+        addToCartText.textContent = {{ 'products.product.sold_out' | t | json }};
+      }
+    }
+
+    // Update inventory hurify if exists
+    var hurrifyEl = document.querySelector('.js-hurrify');
+    if (hurrifyEl && variant.inventory_management) {
+      if (variant.inventory_quantity > 0 && variant.inventory_quantity < 10) {
+        hurrifyEl.classList.remove('hide');
+        var progressBar = hurrifyEl.querySelector('.progress-bar');
+        if (progressBar) {
+          progressBar.style.width = (variant.inventory_quantity * 10) + '%';
+        }
+      } else {
+        hurrifyEl.classList.add('hide');
+      }
+    }
+  }
+
+  // Main variant change handler
+  function handleVariantChange() {
+    var selectedId = parseInt(variantSelect.value, 10);
+    var variant = productData.variants.find(function(v) { return v.id === selectedId; });
+    updateProductInfo(variant);
+  }
+
+  // Listen for changes on the main variant selector
+  variantSelect.addEventListener('change', handleVariantChange);
+
+  // Listen for changes on option selectors (radio buttons, dropdowns)
+  var form = document.getElementById('AddToCartForm-{{ section.id }}');
+  if (form) {
+    form.addEventListener('change', function(e) {
+      var target = e.target;
+      
+      // Check if this is an option selector
+      if (target.matches('.single-option-selector') || 
+          target.matches('.single-option-selector__radio') || 
+          target.matches('[name^="options["]') ||
+          target.name && target.name.indexOf('options[') === 0) {
+        
+        // Give time for the variant selector to update
+        setTimeout(handleVariantChange, 50);
+      }
+    });
+  }
+
+  // Initial update
+  handleVariantChange();
+});
 </script>

@@ -164,10 +164,7 @@
           "disabled": true,
           "settings": {
             "title_heading": "Related products",
-            "product_list": [
-              "abrigo-largo-lana",
-              "awesome-aluminum-plate"
-            ]
+            "product_list": ["abrigo-largo-lana", "awesome-aluminum-plate"]
           }
         },
         "883720d7-3346-4495-85a0-add8b3d7a51f": {

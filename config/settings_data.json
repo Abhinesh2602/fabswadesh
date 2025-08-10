@@ -694,10 +694,7 @@
             }
           }
         },
-        "block_order": [
-          "image_zkU9k3",
-          "image_tcA9yp"
-        ],
+        "block_order": ["image_zkU9k3", "image_tcA9yp"],
         "settings": {
           "enable_slideshow": true,
           "setwidthout": "full",
@@ -1230,10 +1227,7 @@
             }
           }
         },
-        "block_order": [
-          "1583425647500",
-          "1584978388262"
-        ],
+        "block_order": ["1583425647500", "1584978388262"],
         "settings": {
           "enable_slideshow": true,
           "slideshow_height": "750",
@@ -1325,10 +1319,7 @@
             }
           }
         },
-        "block_order": [
-          "1590405549465",
-          "1590404620420"
-        ],
+        "block_order": ["1590405549465", "1590404620420"],
         "settings": {
           "enable_slideshow": true,
           "slideshow_height_adapt": "750",
@@ -1401,11 +1392,7 @@
             }
           }
         },
-        "block_order": [
-          "1587653901780",
-          "1587655482100",
-          "1587655514774"
-        ],
+        "block_order": ["1587653901780", "1587655482100", "1587655514774"],
         "settings": {
           "animation": "fade-up",
           "setwidth": "container",
@@ -1441,10 +1428,7 @@
             }
           }
         },
-        "block_order": [
-          "1587654247564",
-          "1598174967044"
-        ],
+        "block_order": ["1587654247564", "1598174967044"],
         "settings": {
           "animation": "",
           "setwidth": "container",
@@ -1487,11 +1471,7 @@
             }
           }
         },
-        "block_order": [
-          "1587655794959",
-          "1587655905045",
-          "1587655928022"
-        ],
+        "block_order": ["1587655794959", "1587655905045", "1587655928022"],
         "settings": {
           "animation": "fade-up",
           "setwidth": "container",
@@ -2105,10 +2085,7 @@
             }
           }
         },
-        "block_order": [
-          "1660549743ee977a7b-1",
-          "1660549743ee977a7b-0"
-        ],
+        "block_order": ["1660549743ee977a7b-1", "1660549743ee977a7b-0"],
         "settings": {
           "animation": "fade-up",
           "setwidth": "full",
@@ -3158,10 +3135,7 @@
               }
             }
           },
-          "block_order": [
-            "1561109015407",
-            "1561109039640"
-          ],
+          "block_order": ["1561109015407", "1561109039640"],
           "settings": {
             "display_type": "selected",
             "layout": "list",
@@ -3215,10 +3189,7 @@
               }
             }
           },
-          "block_order": [
-            "1561259906467",
-            "1561259904381"
-          ],
+          "block_order": ["1561259906467", "1561259904381"],
           "settings": {
             "autorotate": false,
             "autorotate_speed": 5
