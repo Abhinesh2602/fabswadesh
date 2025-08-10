@@ -1,5 +1,5 @@
 {% comment %} 
-      Slideshow – Responsive, Autoplay (JS), Desktop & Mobile Images 
+          Slideshow – Responsive, Autoplay (JS), Desktop & Mobile Images 
 {% endcomment %}
 
 <div class="slideshow-js-wrapper" id="SlideshowJS-{{ section.id }}">
@@ -41,7 +41,8 @@
   .slideshow-js-wrapper {
     overflow: hidden;
     position: relative;
-    touch-action: pan-y pinch-zoom;
+    touch-action: pan-y pan-x pinch-zoom;
+    -webkit-overflow-scrolling: touch;
   }
   .slideshow-js-track {
     display: flex;
@@ -147,9 +148,24 @@
   
     function handleDragMove(e) {
       if (!isDragging) return;
-      e.preventDefault();
       
       const x = e.type === 'mousemove' ? e.pageX : e.touches[0].pageX;
+      const y = e.type === 'mousemove' ? e.pageY : e.touches[0].pageY;
+      
+      // Check if the swipe is more horizontal than vertical
+      if (e.type === 'touchmove') {
+        const diffX = Math.abs(x - startX);
+        const diffY = Math.abs(y - (e.touches[0].clientY));
+        
+        // If vertical scroll is detected, stop handling the swipe
+        if (diffY > diffX) {
+          isDragging = false;
+          return;
+        }
+        // Only prevent default for horizontal swipes
+        e.preventDefault();
+      }
+  
       const diff = x - startX;
       const slideWidth = wrapper.offsetWidth;
       const maxDiff = slideWidth * (slides.length - 1);
@@ -197,13 +213,14 @@
   
     // Add event listeners for touch and mouse
     track.addEventListener('mousedown', handleDragStart);
-    track.addEventListener('touchstart', handleDragStart);
+    track.addEventListener('touchstart', handleDragStart, { passive: true });
     
     document.addEventListener('mousemove', handleDragMove);
     document.addEventListener('touchmove', handleDragMove, { passive: false });
     
     document.addEventListener('mouseup', handleDragEnd);
     document.addEventListener('touchend', handleDragEnd);
+    document.addEventListener('touchcancel', handleDragEnd);
   
     // Start autoplay
     startAutoplay();
