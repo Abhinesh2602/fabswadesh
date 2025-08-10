@@ -1,5 +1,5 @@
 {% comment %} 
-          Slideshow – Responsive, Autoplay (JS), Desktop & Mobile Images 
+                Slideshow – Responsive, Autoplay (JS), Desktop & Mobile Images 
 {% endcomment %}
 
 <div class="slideshow-js-wrapper" id="SlideshowJS-{{ section.id }}">
@@ -114,8 +114,10 @@
   
     let currentIndex = 0;
     let startX = 0;
+    let startY = 0;
     let currentX = 0;
     let isDragging = false;
+    let isHorizontalSwipe = false;
     let autoplayInterval;
   
     // Initialize first dot as active
@@ -140,7 +142,9 @@
     // Touch/Mouse Events
     function handleDragStart(e) {
       isDragging = true;
+      isHorizontalSwipe = false;
       startX = e.type === 'mousedown' ? e.pageX : e.touches[0].pageX;
+      startY = e.type === 'mousedown' ? e.pageY : e.touches[0].pageY;
       currentX = startX;
       track.style.transition = 'none';
       clearInterval(autoplayInterval);
@@ -152,19 +156,29 @@
       const x = e.type === 'mousemove' ? e.pageX : e.touches[0].pageX;
       const y = e.type === 'mousemove' ? e.pageY : e.touches[0].pageY;
       
-      // Check if the swipe is more horizontal than vertical
-      if (e.type === 'touchmove') {
-        const diffX = Math.abs(x - startX);
-        const diffY = Math.abs(y - (e.touches[0].clientY));
+      const diffX = Math.abs(x - startX);
+      const diffY = Math.abs(y - startY);
+      
+      // Determine swipe direction only once
+      if (!isHorizontalSwipe && (diffX > 10 || diffY > 10)) {
+        isHorizontalSwipe = diffX > diffY;
         
-        // If vertical scroll is detected, stop handling the swipe
-        if (diffY > diffX) {
+        // If it's not a horizontal swipe, stop handling and allow normal scroll
+        if (!isHorizontalSwipe) {
           isDragging = false;
+          track.style.transition = 'transform 0.6s ease';
+          goToSlide(currentIndex);
+          startAutoplay();
           return;
         }
-        // Only prevent default for horizontal swipes
+      }
+      
+      // Only handle horizontal swipes
+      if (isHorizontalSwipe && e.type === 'touchmove') {
         e.preventDefault();
       }
+      
+      if (!isHorizontalSwipe) return;
   
       const diff = x - startX;
       const slideWidth = wrapper.offsetWidth;
@@ -178,7 +192,11 @@
     }
   
     function handleDragEnd() {
-      if (!isDragging) return;
+      if (!isDragging || !isHorizontalSwipe) {
+        isDragging = false;
+        return;
+      }
+      
       isDragging = false;
       
       const slideWidth = wrapper.offsetWidth;
@@ -211,10 +229,11 @@
       });
     });
   
-    // Add event listeners for touch and mouse
+    // Add event listeners - attach to the slideshow wrapper, not document
     track.addEventListener('mousedown', handleDragStart);
     track.addEventListener('touchstart', handleDragStart, { passive: true });
     
+    // These need to be on document to handle movement outside the element
     document.addEventListener('mousemove', handleDragMove);
     document.addEventListener('touchmove', handleDragMove, { passive: false });
     
@@ -231,6 +250,10 @@
         handleDragEnd();
       }
     });
+    
+    // Pause autoplay on hover/focus
+    wrapper.addEventListener('mouseenter', () => clearInterval(autoplayInterval));
+    wrapper.addEventListener('mouseleave', startAutoplay);
   });
 </script>
 
