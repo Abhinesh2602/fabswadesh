@@ -2195,24 +2195,6 @@ document.addEventListener('DOMContentLoaded', function() {
   // Listen for changes on the main variant selector
   variantSelect.addEventListener('change', handleVariantChange);
 
-  // Listen for changes on option selectors (radio buttons, dropdowns)
-  var form = document.getElementById('AddToCartForm-{{ section.id }}');
-  if (form) {
-    form.addEventListener('change', function(e) {
-      var target = e.target;
-      
-      // Check if this is an option selector
-      if (target.matches('.single-option-selector') || 
-          target.matches('.single-option-selector__radio') || 
-          target.matches('[name^="options["]') ||
-          target.name && target.name.indexOf('options[') === 0) {
-        
-        // Give time for the variant selector to update
-        setTimeout(handleVariantChange, 50);
-      }
-    });
-  }
-
   // Initial update
   handleVariantChange();
 });
