@@ -12,11 +12,12 @@
     "main": {
       "type": "cart-template",
       "settings": {
-        "cart_notes_enable": true
+        "cart_notes_enable": false
       }
     },
     "2979a36a-c6b2-4ef9-a5cc-d84aa4da690b": {
       "type": "product-list-swiper",
+      "disabled": true,
       "settings": {
         "animation": "",
         "setwidth": "container",

@@ -231,7 +231,7 @@
         <div class="mini-cart-taxes">
           {{ 'cart.general.taxes_and_shipping_at_checkout' | t }}
         </div>
-        <div class="mini-cart-btns mt-4 d-flex">
+        <div class="mini-cart-btns mt-3 d-flex">
           <a class="btn btn-outline js-cart-btn-cart w-50 mr-2" href="{{ routes.cart_url }}">{{ 'cart.general.view' | t }}</a>
           <a class="ml-2 btn gradient-theme js-cart-btn-checkout btn-theme w-50 d-flex align-items-center justify-content-center {% if cart.item_count == 0 %} disabled{% endif %}" href="/checkout">
             {{ 'cart.general.checkout' | t }}</a>
@@ -271,6 +271,19 @@
     .js-mini-cart .mini-cart-content {
       width: 380px;
     }
+    .mini-cart-total {
+      font-family: montserrat;
+      font-size: 14px;
+    }
+    .js-cart-total {
+      font-family: montserrat;
+      font-size: 14px;
+    }
+    .bottom-total {
+      font-family: montserrat;
+      font-size: 14px;
+    }
+
   </style>
   <span class="site-header__link site-header__cart js-mini-cart">
     <span class="js-toggle-cart" title="{{ 'cart.general.title' | t }}">
