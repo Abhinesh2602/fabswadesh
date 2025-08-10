@@ -112,6 +112,78 @@
     padding-top: 10px;
   }
 
+  /* Enhanced Quantity Selector Styles */
+  .quantity-selector {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--g-input-border, #ddd);
+    border-radius: var(--g-input-radius, 4px);
+    background: white;
+    overflow: hidden;
+    width: 130px;
+  }
+
+  .quantity-btn {
+    background: var(--g-input-bg, #f8f9fa);
+    border: none;
+    width: 40px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--g-color-heading, #333);
+    transition: background-color 0.2s, color 0.2s;
+    user-select: none;
+  }
+
+  .quantity-btn:hover {
+    background: var(--g-color-primary, #e9ecef);
+    color: var(--g-cta-text, white);
+  }
+
+  .quantity-btn:active {
+    transform: scale(0.95);
+  }
+
+  .quantity-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #f8f9fa;
+    color: #6c757d;
+  }
+
+  .quantity-btn:disabled:hover {
+    background: #f8f9fa;
+    color: #6c757d;
+    transform: none;
+  }
+
+  .product-form__quantity {
+    border: none;
+    width: 50px;
+    height: 44px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 500;
+    background: white;
+    outline: none;
+    -moz-appearance: textfield;
+    color: var(--g-color-heading, #333);
+  }
+
+  .product-form__quantity::-webkit-outer-spin-button,
+  .product-form__quantity::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .product-form__quantity:focus {
+    background: var(--g-input-bg, #f8f9fa);
+  }
+
   .product-form__quantity-submit .product-form__item--submit {
     margin-left: 10px;
   }
@@ -350,12 +422,33 @@
       display: block;
     }
     .product-form__item--quantity{
-      width: 130px;
       margin-bottom: 10px;
+    }
+    .quantity-selector {
+      width: 130px;
     }
     .product-form__quantity-submit .product-form__item--submit{
       margin:0 0 10px 0 !important;
     }
+  }
+
+  @media (max-width: 767px) {
+    .quantity-selector {
+      width: 120px;
+    }
+    
+    .quantity-btn {
+      width: 35px;
+      height: 40px;
+      font-size: 16px;
+    }
+    
+    .product-form__quantity {
+      width: 50px;
+      height: 40px;
+      font-size: 14px;
+    }
+  }
     .product-form__buynow{
       margin:0;
     }
@@ -597,7 +690,11 @@
                 <div class="product-form__quantity-submit pt-1">
                   <div class="product-form__item product-form__item--quantity">
                     <label class="hide" for="Quantity">{{ 'products.product.quantity' | t }}</label>
-                    <input type="number" id="Quantity" name="quantity" value="1" min="1" class="product-form__input product-form__quantity">
+                    <div class="quantity-selector">
+                      <button type="button" class="quantity-btn quantity-decrease" aria-label="Decrease quantity">−</button>
+                      <input type="number" id="Quantity" name="quantity" value="1" min="1" class="product-form__input product-form__quantity" aria-label="{{ 'products.product.quantity' | t }}">
+                      <button type="button" class="quantity-btn quantity-increase" aria-label="Increase quantity">+</button>
+                    </div>
                   </div>
                   <div class="product-form__item product-form__item--submit {% unless block.settings.enable_payment_button %} btn-disablebuynow {% endunless %}">
                     <button type="submit"
@@ -2494,5 +2591,51 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }, 100);
   }
+});
+
+// Enhanced Quantity Selector Functionality
+document.addEventListener('DOMContentLoaded', function() {
+  const quantitySelector = document.querySelector('.quantity-selector');
+  if (!quantitySelector) return;
+  
+  const decreaseBtn = quantitySelector.querySelector('.quantity-decrease');
+  const increaseBtn = quantitySelector.querySelector('.quantity-increase');
+  const quantityInput = quantitySelector.querySelector('.product-form__quantity');
+  
+  function updateQuantity(newValue) {
+    const min = parseInt(quantityInput.getAttribute('min')) || 1;
+    const max = parseInt(quantityInput.getAttribute('max')) || 999;
+    
+    newValue = Math.max(min, Math.min(max, newValue));
+    quantityInput.value = newValue;
+    
+    // Update button states
+    decreaseBtn.disabled = newValue <= min;
+    increaseBtn.disabled = newValue >= max;
+    
+    // Trigger change event for any listeners
+    quantityInput.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+  
+  // Decrease button click
+  decreaseBtn.addEventListener('click', function() {
+    const currentValue = parseInt(quantityInput.value) || 1;
+    updateQuantity(currentValue - 1);
+  });
+  
+  // Increase button click
+  increaseBtn.addEventListener('click', function() {
+    const currentValue = parseInt(quantityInput.value) || 1;
+    updateQuantity(currentValue + 1);
+  });
+  
+  // Input change validation
+  quantityInput.addEventListener('input', function() {
+    const value = parseInt(this.value) || 1;
+    updateQuantity(value);
+  });
+  
+  // Initialize button states
+  updateQuantity(parseInt(quantityInput.value) || 1);
 });
 </script>
