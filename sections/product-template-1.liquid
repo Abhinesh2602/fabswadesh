@@ -2095,11 +2095,22 @@ initPhotoSwipeFromDOM('.my-gallery');
     form.addEventListener('change', function (e) {
       if (e.target.matches('.single-option-selector, [name^="options["]')) {
         syncVariantFromOptions();
+        
+        // Also update sticky cart selectors to match
+        updateStickyCartSelectors();
+        
+        // Update sticky cart title after a short delay
+        setTimeout(function() {
+          if (window.updateStickyVariantTitle) {
+            window.updateStickyVariantTitle();
+          }
+        }, 100);
       }
     });
 
     // Initial sync (handles default selections on load)
     syncVariantFromOptions();
+    updateStickyCartSelectors();
   });
 </script>
 
@@ -2126,11 +2137,27 @@ document.addEventListener('DOMContentLoaded', function() {
   function updateProductInfo(variant) {
     if (!variant) return;
 
-    // Update price
+    // Update main product price
     var priceEl = document.getElementById('ProductPrice-{{ section.id }}');
     if (priceEl) {
       priceEl.textContent = formatMoney(variant.price);
       priceEl.setAttribute('content', (variant.price / 100).toString());
+    }
+
+    // Update sticky cart price
+    var stickyPriceEl = document.getElementById('js-sticky-price');
+    if (stickyPriceEl) {
+      stickyPriceEl.textContent = formatMoney(variant.price);
+    }
+
+    // Update sticky cart title/variant info
+    var stickyTitleEl = document.getElementById('js-sticky-title');
+    if (stickyTitleEl) {
+      if (variant.title && variant.title !== 'Default Title') {
+        stickyTitleEl.textContent = '- ' + variant.title;
+      } else {
+        stickyTitleEl.textContent = '';
+      }
     }
 
     // Update compare price
@@ -2170,6 +2197,20 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
 
+    // Update sticky cart button
+    var stickyBtn = document.getElementById('js-sticky-btn');
+    if (stickyBtn) {
+      if (variant.available) {
+        stickyBtn.disabled = false;
+        stickyBtn.classList.remove('btn--sold-out');
+        stickyBtn.textContent = {{ 'products.product.add_to_cart' | t | json }};
+      } else {
+        stickyBtn.disabled = true;
+        stickyBtn.classList.add('btn--sold-out');
+        stickyBtn.textContent = {{ 'products.product.sold_out' | t | json }};
+      }
+    }
+
     // Update inventory hurify if exists
     var hurrifyEl = document.querySelector('.js-hurrify');
     if (hurrifyEl && variant.inventory_management) {
@@ -2182,6 +2223,61 @@ document.addEventListener('DOMContentLoaded', function() {
       } else {
         hurrifyEl.classList.add('hide');
       }
+    }
+  }
+  
+  function updateStickyCartSelectors() {
+    // Update sticky cart selectors to match main product selections
+    var form = document.getElementById('AddToCartForm-{{ section.id }}');
+    if (!form) return;
+    
+    console.log('Updating sticky cart selectors...'); // Debug log
+    
+    // Get current selections from main product radio buttons
+    form.querySelectorAll('[name^="options["]').forEach(function(input) {
+      if (input.type === 'radio' && input.checked) {
+        var optionName = input.name.substring(input.name.indexOf('[') + 1, input.name.indexOf(']'));
+        console.log('Radio option found:', optionName, '=', input.value); // Debug log
+        updateStickySelector(optionName, input.value);
+      }
+    });
+    
+    // Also check dropdown selectors in main product
+    form.querySelectorAll('.single-option-selector').forEach(function(select) {
+      var optionName = select.getAttribute('data-name');
+      if (optionName && select.value) {
+        console.log('Dropdown option found:', optionName, '=', select.value); // Debug log
+        updateStickySelector(optionName, select.value);
+      }
+    });
+  }
+  
+  function updateStickySelector(optionName, value) {
+    // Find corresponding sticky cart selector (they're outside the main form)
+    console.log('Looking for sticky selector with data-name:', optionName); // Debug log
+    
+    var stickySelectors = document.querySelectorAll('.sticky-cart-selectors select[data-name="' + optionName + '"]');
+    console.log('Found sticky selectors:', stickySelectors.length); // Debug log
+    
+    stickySelectors.forEach(function(selector) {
+      console.log('Current sticky value:', selector.value, 'New value:', value); // Debug log
+      if (selector.value !== value) {
+        selector.value = value;
+        console.log('Updated sticky selector to:', value); // Debug log
+        // Don't trigger change event to avoid infinite loop
+      }
+    });
+    
+    // Also try a broader search as fallback
+    if (stickySelectors.length === 0) {
+      var allStickySelectors = document.querySelectorAll('select[data-name="' + optionName + '"]');
+      console.log('Fallback search found:', allStickySelectors.length, 'selectors'); // Debug log
+      allStickySelectors.forEach(function(selector) {
+        if (selector.value !== value) {
+          selector.value = value;
+          console.log('Updated via fallback:', value); // Debug log
+        }
+      });
     }
   }
 
@@ -2197,5 +2293,206 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Initial update
   handleVariantChange();
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Add to cart drawer functionality
+  var addToCartForm = document.getElementById('AddToCartForm-{{ section.id }}');
+  if (!addToCartForm) return;
+
+  addToCartForm.addEventListener('submit', function(e) {
+    e.preventDefault(); // Prevent default form submission
+    
+    var addToCartBtn = document.getElementById('AddToCart-{{ section.id }}');
+    var addToCartText = document.getElementById('AddToCartText-{{ section.id }}');
+    
+    if (!addToCartBtn || addToCartBtn.disabled) return;
+    
+    // Show loading state
+    var originalText = addToCartText.textContent;
+    addToCartText.textContent = 'Adding...';
+    addToCartBtn.disabled = true;
+    
+    // Get form data
+    var formData = new FormData(addToCartForm);
+    
+    // Add to cart via AJAX
+    fetch('/cart/add.js', {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+      // Reset button state
+      addToCartText.textContent = originalText;
+      addToCartBtn.disabled = false;
+      
+      // Update cart count, content, and open drawer
+      updateCartDrawer();
+    })
+    .catch(error => {
+      console.error('Error adding to cart:', error);
+      // Reset button state
+      addToCartText.textContent = originalText;
+      addToCartBtn.disabled = false;
+      
+      // Show error message
+      alert('Error adding item to cart. Please try again.');
+    });
+  });
+  
+  function updateCartDrawer() {
+    // Fetch updated cart data and refresh drawer content
+    fetch('/cart.js')
+      .then(response => response.json())
+      .then(cart => {
+        // Update cart count in header
+        var cartCountElements = document.querySelectorAll('.js-cart-count');
+        cartCountElements.forEach(function(element) {
+          element.textContent = '(' + cart.item_count + ')';
+        });
+        
+        // Update cart total
+        var cartTotalElements = document.querySelectorAll('.js-cart-total');
+        cartTotalElements.forEach(function(element) {
+          element.textContent = formatCartMoney(cart.total_price);
+        });
+        
+        // Update drawer content with latest cart items
+        updateDrawerContent(cart);
+        
+        // Open cart drawer after content is updated
+        setTimeout(openCartDrawer, 100);
+      });
+  }
+  
+  function updateDrawerContent(cart) {
+    var drawerContent = document.querySelector('.js-mini-cart-content');
+    if (!drawerContent) return;
+    
+    // Clear existing content
+    drawerContent.innerHTML = '';
+    
+    if (cart.item_count === 0) {
+      drawerContent.innerHTML = '<p class="text-center py-4">{{ "cart.general.empty" | t }}</p>';
+      return;
+    }
+    
+    // Build cart items HTML
+    var cartHTML = '';
+    cart.items.forEach(function(item) {
+      cartHTML += `
+        <div class="mini-cart-item d-flex align-items-center py-3 border-bottom">
+          <div class="mini-cart-image">
+            <img src="${item.image}" alt="${item.title}" width="80" height="80" class="img-fluid">
+          </div>
+          <div class="mini-cart-meta flex-grow-1">
+            <h6 class="mini-cart-title mb-1">${item.product_title}</h6>
+            ${item.variant_title && item.variant_title !== 'Default Title' ? `<p class="mini-cart-variant text-muted small mb-1">${item.variant_title}</p>` : ''}
+            <div class="d-flex align-items-center justify-content-between">
+              <span class="mini-cart-price">${formatCartMoney(item.line_price)}</span>
+              <div class="d-flex align-items-center">
+                <span class="mini-cart-quantity mx-2">Qty: ${item.quantity}</span>
+                <button class="js-remove-mini-cart btn btn-link p-0 text-muted" data-key="${item.key}" title="Remove">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M9 3L3 9M3 3L9 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+    
+    drawerContent.innerHTML = cartHTML;
+    
+    // Add event listeners for remove buttons
+    var removeButtons = drawerContent.querySelectorAll('.js-remove-mini-cart');
+    removeButtons.forEach(function(button) {
+      button.addEventListener('click', function() {
+        var itemKey = this.dataset.key;
+        removeCartItem(itemKey);
+      });
+    });
+  }
+  
+  function removeCartItem(itemKey) {
+    fetch('/cart/change.js', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id: itemKey,
+        quantity: 0
+      })
+    })
+    .then(response => response.json())
+    .then(cart => {
+      updateDrawerContent(cart);
+      
+      // Update cart count and total
+      var cartCountElements = document.querySelectorAll('.js-cart-count');
+      cartCountElements.forEach(function(element) {
+        element.textContent = '(' + cart.item_count + ')';
+      });
+      
+      var cartTotalElements = document.querySelectorAll('.js-cart-total');
+      cartTotalElements.forEach(function(element) {
+        element.textContent = formatCartMoney(cart.total_price);
+      });
+    });
+  }
+  
+  function updateCartCount() {
+    // Update cart count via AJAX
+    fetch('/cart.js')
+      .then(response => response.json())
+      .then(cart => {
+        // Update cart count in header
+        var cartCountElements = document.querySelectorAll('.js-cart-count');
+        cartCountElements.forEach(function(element) {
+          element.textContent = '(' + cart.item_count + ')';
+        });
+        
+        // Update cart total
+        var cartTotalElements = document.querySelectorAll('.js-cart-total');
+        cartTotalElements.forEach(function(element) {
+          element.textContent = formatCartMoney(cart.total_price);
+        });
+      });
+  }
+  
+  function formatCartMoney(cents) {
+    return (cents / 100).toLocaleString('{{ shop.locale }}', {
+      style: 'currency',
+      currency: '{{ shop.currency }}'
+    });
+  }
+  
+  function openCartDrawer() {
+    // Open cart drawer by triggering the cart toggle
+    var cartToggle = document.querySelector('.js-toggle-cart');
+    if (cartToggle) {
+      cartToggle.click();
+    }
+    
+    // If the above doesn't work, try alternative methods
+    setTimeout(function() {
+      var cartDrawer = document.querySelector('.js-mini-cart');
+      if (cartDrawer) {
+        cartDrawer.classList.add('active');
+      }
+      
+      // Add active class to cart drawer
+      var miniCartContent = document.querySelector('.mini-cart-content');
+      if (miniCartContent) {
+        miniCartContent.classList.add('active');
+      }
+    }, 100);
+  }
 });
 </script>

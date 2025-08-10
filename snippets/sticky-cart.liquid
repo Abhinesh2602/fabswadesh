@@ -1,99 +1,100 @@
 {%- if section.settings.enable -%}
-{%- assign current_variant = product.selected_or_first_available_variant -%}
+  {%- assign current_variant = product.selected_or_first_available_variant -%}
   <!-- sticky-cart.liquid -->
-  <style>
-    :root{
-      --sticky-cart-mix: {{ section.settings.mix_1 }};
-      --sticky-cart-mix2: {{ section.settings.mix_2 }};
-      --sticky-cart-text: {{ section.settings.text_cl }};
-      --sticky-cart-bg: {{ section.settings.cart_bg }};
-      --sticky-cart-cl: {{ section.settings.cart_cl }};
-      --sticky-cart-cl-hover: {{ section.settings.cart_cl_hover }};
-      }
-  </style>
-  <style>
-    .sticky-cart-wr{
-      position: fixed;
-      width: 100%;
-      padding:9px 0;
-      bottom: 0;
-      z-index: 997;
-      background: var(--sticky-cart-mix);
-        left:0;
-        -webkit-transition: all ease .45s;
-        -o-transition: all ease .45s;
-        transition: all ease .45s;
-        -webkit-transform: translateY(100%);
-        -ms-transform: translateY(100%);
-        transform: translateY(100%);
-        }
-    .sticky-cart-wr.active{
-      -webkit-transform: translateY(0);
-      -ms-transform: translateY(0);
-      transform: translateY(0);
-    }
-    .sticky-cart-wr.active .svg-cart{
-      opacity: 0;
-      display: none;
-    }
-    .sticky-cart-wr.disable{
-      -webkit-transform: translateY(100%) !important;
-      -ms-transform: translateY(100%) !important;
-      transform: translateY(100%) !important;
-    }
-    .sticky-cart-wr.disable .svg-cart{
-      opacity: 1;
-      display: block;
-      margin:0 auto;
-      fill:none;
-    }
-    #js-sticky-btn{
-      border-color:var(--sticky-cart-bg) ;
-      color:var(--sticky-cart-cl);
-      background:var(--sticky-cart-bg);
-      padding:11px 24px;
-    }
-    #js-sticky-btn:hover{
-      color:var(--sticky-cart-cl-hover);
-      {% unless settings.enable_button_hover %}
-        background: var(--g-main);
-      {% endunless %}
-    }
-    #js-sticky-prd{
-      display: -webkit-box;
-      display: -ms-flexbox;
-      display: flex;
-      -webkit-box-pack: center;
-      -ms-flex-pack: center;
-      justify-content: center;
-      -webkit-box-align: center;
-      -ms-flex-align: center;
-      align-items: center;
-      -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-      position:relative;
-    }
-    #js-sticky-prd h3{
-      font-size: var(--g-font-size);
-      max-width: 300px;
-      overflow: hidden;
-      -o-text-overflow: ellipsis;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      color:var(--sticky-cart-text);
-      text-transform: capitalize;
-    }
-    #js-sticky-price {
-      color:var(--sticky-cart-text);
-    }
-    #js-sticky-img{
-      height:65px;
-      width: auto;
-    }
+  <style > :root
+  {
+    --sticky-cart-mix: {{ section.settings.mix_1 }};
+    --sticky-cart-mix2: {{ section.settings.mix_2 }};
+    --sticky-cart-text: {{ section.settings.text_cl }};
+    --sticky-cart-bg: {{ section.settings.cart_bg }};
+    --sticky-cart-cl: {{ section.settings.cart_cl }};
+    --sticky-cart-cl-hover: {{ section.settings.cart_cl_hover }};
+  }
+</style>
+<style>
+  .sticky-cart-wr {
+    position: fixed;
+    width: 100%;
+    padding: 9px 0;
+    bottom: 0;
+    z-index: 997;
+    background: var(--sticky-cart-mix);
+    left: 0;
+    -webkit-transition: all ease 0.45s;
+    -o-transition: all ease 0.45s;
+    transition: all ease 0.45s;
+    -webkit-transform: translateY(100%);
+    -ms-transform: translateY(100%);
+    transform: translateY(100%);
+  }
+  .sticky-cart-wr.active {
+    -webkit-transform: translateY(0);
+    -ms-transform: translateY(0);
+    transform: translateY(0);
+  }
+  .sticky-cart-wr.active .svg-cart {
+    opacity: 0;
+    display: none;
+  }
+  .sticky-cart-wr.disable {
+    -webkit-transform: translateY(100%) !important;
+    -ms-transform: translateY(100%) !important;
+    transform: translateY(100%) !important;
+  }
+  .sticky-cart-wr.disable .svg-cart {
+    opacity: 1;
+    display: block;
+    margin: 0 auto;
+    fill: none;
+  }
+  #js-sticky-btn {
+    border-color: var(--sticky-cart-bg);
+    color: var(--sticky-cart-cl);
+    background: var(--sticky-cart-bg);
+    padding: 11px 24px;
+  }
+  #js-sticky-btn:hover {
+    color: var(--sticky-cart-cl-hover);
+    {% unless settings.enable_button_hover %}
+      background: var(--g-main);
+    {% endunless %}
+  }
+  #js-sticky-prd {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    position: relative;
+  }
+  #js-sticky-prd h3 {
+    font-size: var(--g-font-size);
+    max-width: 300px;
+    overflow: hidden;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--sticky-cart-text);
+    text-transform: capitalize;
+  }
+  #js-sticky-price {
+    color: var(--sticky-cart-text);
+  }
+  #js-sticky-img {
+    height: 65px;
+    width: auto;
+  }
     .sticky-cart-select{
       background:var(--sticky-cart-mix2);
       text-transform: uppercase;
       font-size: 12px;
+      position: relative;
     }
     .sticky-cart-select select{
       background: transparent;
@@ -101,110 +102,219 @@
       padding: 10px;
       font-size: 12px;
       text-transform: uppercase;
+      position: relative;
     }
     
-    #js-sticky-quantity{
-      max-width: 70px;
-      font-weight: bold;
-      text-align: center;
+    /* Custom dropdown container */
+    .custom-dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    
+    .custom-dropdown-trigger {
+      background: transparent;
+      border: 1px solid #ccc;
       padding: 10px;
-    }
-
-    #js-sticky-close{
+      font-size: 12px;
+      text-transform: uppercase;
+      font-weight: bold;
+      cursor: pointer;
       display: flex;
-      width: 40px;
-      height: 40px;
-      border: none;
-      top: 0;
-      left: -50px;
-      line-height: 38px;
-      text-align: center;
-      position: absolute;
-      color:var(--sticky-cart-mix);;
-      border-radius: 5px;
-      filter: brightness(0.8);
-      opacity:0;
-      border-radius: 50%;
-      top: 50%;
-      margin-top: -20px;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
+      min-width: 120px;
     }
-    #js-sticky-close .icon{margin:0 auto;}
-    .active #js-sticky-close{opacity:1}
-    .active.disable #js-sticky-close{opacity:.6;top:-70px;margin-top: 0;}
-    #js-sticky-close .icon-close+.icon{display:none}
-    .disable #js-sticky-close .icon-close{display:none}
-    .disable #js-sticky-close .icon-close+.icon{display:block}
-    @media (max-width:540px) {
-      #js-sticky-prd{
-        padding:0 8px;
-      }
-      .sticky-cart-select label{
-        display: none;
-      }
-      #js-sticky-btn{
-        padding: 8px;
-        font-size: 12px;
-        letter-spacing: 0;
-      }
-      .sticky-cart-select select{
-        padding:2px;
-      }
+    
+    .custom-dropdown-trigger::after {
+      content: '▲';
+      margin-left: 8px;
+      font-size: 10px;
     }
-  </style>
+    
+    .custom-dropdown-options {
+      position: absolute;
+      bottom: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      border: 1px solid #ccc;
+      border-bottom: none;
+      max-height: 200px;
+      overflow-y: auto;
+      z-index: 1000;
+      display: none;
+      box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .custom-dropdown.active .custom-dropdown-options {
+      display: block;
+    }
+    
+    .custom-dropdown-option {
+      padding: 10px;
+      cursor: pointer;
+      font-size: 12px;
+      text-transform: uppercase;
+      font-weight: bold;
+      background: transparent;
+    }
+    
+    .custom-dropdown-option:hover,
+    .custom-dropdown-option.selected {
+      background: var(--sticky-cart-mix2);
+    }
+    
+    .custom-dropdown-option:not(:last-child) {
+      border-bottom: 1px solid #eee;
+    }  #js-sticky-quantity {
+    max-width: 70px;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+  }
+
+  #js-sticky-close {
+    display: flex;
+    width: 40px;
+    height: 40px;
+    border: none;
+    top: 0;
+    left: -50px;
+    line-height: 38px;
+    text-align: center;
+    position: absolute;
+    color: var(--sticky-cart-mix);
+    border-radius: 5px;
+    filter: brightness(0.8);
+    opacity: 0;
+    border-radius: 50%;
+    top: 50%;
+    margin-top: -20px;
+    align-items: center;
+    justify-content: center;
+  }
+  #js-sticky-close .icon {
+    margin: 0 auto;
+  }
+  .active #js-sticky-close {
+    opacity: 1
+  }
+  .active.disable #js-sticky-close {
+    opacity: .6;
+    top: -70px;
+    margin-top: 0;
+  }
+  #js-sticky-close .icon-close + .icon {
+    display: none
+  }
+  .disable #js-sticky-close .icon-close {
+    display: none
+  }
+  .disable #js-sticky-close .icon-close + .icon {
+    display: block
+  }
+  @media (max-width: 540px) {
+    #js-sticky-prd {
+      padding: 0 8px;
+    }
+    .sticky-cart-select label {
+      display: none;
+    }
+    #js-sticky-btn {
+      padding: 8px;
+      font-size: 12px;
+      letter-spacing: 0;
+    }
+    .sticky-cart-select select {
+      padding: 2px;
+    }
+  }
+</style>
 <div id="js-anchor-sticky-cart"></div>
-  <div class="sticky-cart-wr shadow d-flex" >
-    <div id="js-sticky-prd" class="container align-self-center">
-      {%- assign img_url = product.featured_image | image_url: width: 1 | replace: 'width=1', 'width={width}' -%}
-      <img id="js-sticky-img" src="{{ product.featured_image | image_url: width: 200 }}" 
-        class="lazyload"
-        loading="lazy"
-        data-src="{{ img_url }}"
-        data-widths="[360, 540]"
-        width="{{ product.featured_image.width }}"
-        height="{{ product.featured_image.height }}"/>
-      <h3 class="px-4 m-0 d-none d-lg-block font-family-2">{{ product.title }} <span id="js-sticky-title">{%- unless product.has_only_default_variant -%}- {{ current_variant.title }}{%- endunless -%}</span></h3>
-      <div class="sticky-cart-selectors d-flex py-2  pr-2 pl-2 pr-lg-4 text-center">
-        {%- unless product.has_only_default_variant -%}
+<div class="sticky-cart-wr shadow d-flex">
+  <div id="js-sticky-prd" class="container align-self-center">
+    {%- assign img_url = product.featured_image | image_url: width: 1 | replace: 'width=1', 'width={width}' -%}
+    <img
+      id="js-sticky-img"
+      src="{{ product.featured_image | image_url: width: 200 }}"
+      class="lazyload"
+      loading="lazy"
+      data-src="{{ img_url }}"
+      data-widths="[360, 540]"
+      width="{{ product.featured_image.width }}"
+      height="{{ product.featured_image.height }}" />
+    <h3 class="px-4 m-0 d-none d-lg-block font-family-2">{{ product.title }}
+      <span id="js-sticky-title">
+        {%- unless product.has_only_default_variant -%}- {{ current_variant.title }}{%- endunless -%}
+      </span>
+    </h3>
+    <div class="sticky-cart-selectors d-flex py-2  pr-2 pl-2 pr-lg-4 text-center">
+      {%- unless product.has_only_default_variant -%}
         {%- for option in product.options_with_values -%}
-        {% unless option.name == 'default' %}
-        <div class="sticky-cart-select px-lg-3 px-1 mx-1">
-          <label>{{ option.name }}</label>
-          <select data-name="{{ option.name }}"
-                  onchange="triggerOption(this)"
-                  id="js-sticky-option-{{ forloop.index }}"
-                  data-radio="ProductSelect-option-{{ forloop.index0 }}"
-                  data-selectbox="SingleOptionSelector-{{ forloop.index0 }}">
-            {% for value in option.values %}
-            <option value="{{ value | escape }}" {% if option.selected_value == value %} selected="selected"{% endif %}>{{ value }}</option>
-            {% endfor %}
-          </select>
-        </div>
-        {%- endunless -%}
+          {% unless option.name == 'default' %}
+            <div class="sticky-cart-select px-lg-3 px-1 mx-1">
+              <label>{{ option.name }}</label>
+              
+              <!-- Custom dropdown that expands upward -->
+              <div class="custom-dropdown" data-name="{{ option.name }}">
+                <div class="custom-dropdown-trigger" data-option-name="{{ option.name }}">
+                  <span class="selected-value">{{ option.selected_value }}</span>
+                </div>
+                <div class="custom-dropdown-options">
+                  {% for value in option.values %}
+                    <div class="custom-dropdown-option {% if option.selected_value == value %}selected{% endif %}" 
+                         data-value="{{ value | escape }}" 
+                         data-index="{{ forloop.index0 }}">
+                      {{ value }}
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+              
+              <!-- Hidden select for form functionality -->
+              <select style="display: none;"
+                data-name="{{ option.name }}"
+                onchange="triggerOption(this)"
+                id="js-sticky-option-{{ forloop.index }}"
+                data-radio="ProductSelect-option-{{ forloop.index0 }}"
+                data-selectbox="SingleOptionSelector-{{ forloop.index0 }}">
+                {% for value in option.values %}
+                  <option
+                    value="{{ value | escape }}"
+                    {% if option.selected_value == value %}
+                    selected="selected"
+                    {% endif %}>{{ value }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          {%- endunless -%}
         {%- endfor -%}
-        {%- endunless -%}
-      </div>
-      <div id="js-sticky-price" class="product-card__price">
-        {{ current_variant.price | money }}
-      </div>
-      <button id="js-sticky-btn" {% unless current_variant.available %}disabled="disabled"{% endunless %}
-              class="btn btn-theme my-2 ml-auto" 
-              onclick="triggerCart(this)" 
-              data-buttonid="AddToCart-{{ section.id }}">
-        {%- unless current_variant.available -%}
-        {{ 'products.product.sold_out' | t }}
-        {%- else -%}
-        {{ 'products.product.add_to_cart' | t }}
-        {%- endunless -%}
-      </button>
-      <button id="js-sticky-close">
-        {%- render 'icon-close' -%}
-        {%- render 'icon-cart' -%}
-      </button>
+      {%- endunless -%}
     </div>
+    <div id="js-sticky-price" class="product-card__price">
+      {{ current_variant.price | money }}
+    </div>
+    <button
+      id="js-sticky-btn"
+      {% unless current_variant.available %}
+      disabled="disabled"
+      {% endunless %}
+      class="btn btn-theme my-2 ml-auto"
+      onclick="triggerCart(this)"
+      data-buttonid="AddToCart-{{ section.id }}">
+      {%- unless current_variant.available -%}
+        {{ 'products.product.sold_out' | t }}
+      {%- else -%}
+        {{ 'products.product.add_to_cart' | t }}
+      {%- endunless -%}
+    </button>
+    <button id="js-sticky-close">
+      {%- render 'icon-close' -%}
+      {%- render 'icon-cart' -%}
+    </button>
   </div>
-  <script>
+</div>
+<script>
     triggerCart = function (e){
       var elementButton = e.getAttribute('data-buttonid');
       document.getElementById(elementButton).click();
@@ -213,19 +323,217 @@
     triggerOption = function (e){
       var index = e.selectedIndex;
       var value = e.value;
+      var optionName = e.getAttribute('data-name');
       var elementRadio = document.getElementById(e.getAttribute('data-radio'));
       var elementSelect = document.getElementById(e.getAttribute('data-selectbox'));
 
-      //     Swatch variant
+      // Update main product selectors first
+      updateMainProductSelector(optionName, value);
+
+      // Swatch variant
       if (elementRadio !== null){
-        elementRadio.getElementsByTagName('input')[index].click();
+        var radioInputs = elementRadio.getElementsByTagName('input');
+        if (radioInputs[index]) {
+          radioInputs[index].click();
+        }
       }
 
-      //     dropdown variant
+      // Dropdown variant
       if (elementSelect !== null){
-        elementSelect.value  = value;
+        elementSelect.value = value;
         elementSelect.dispatchEvent(new Event('change'));
       }
+      
+      // Update sticky cart variant title after a short delay to let other updates complete
+      setTimeout(updateStickyVariantTitle, 100);
     }
-  </script>
-{%- endif -%}
+    
+    function updateMainProductSelector(optionName, value) {
+      // Update radio buttons with matching option name
+      var radioInputs = document.querySelectorAll('input[name="options[' + optionName + ']"]');
+      radioInputs.forEach(function(radio) {
+        if (radio.value === value) {
+          radio.checked = true;
+          radio.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      });
+      
+      // Update dropdown selectors with matching option name
+      var dropdownSelects = document.querySelectorAll('select[data-name="' + optionName + '"]');
+      dropdownSelects.forEach(function(select) {
+        if (select.value !== value) {
+          select.value = value;
+          select.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+      });
+    }
+    
+    function updateStickyVariantTitle() {
+      // Get all current sticky cart selections to build variant title
+      var stickySelectors = document.querySelectorAll('.sticky-cart-selectors select[data-name]');
+      var selectedOptions = [];
+      
+      stickySelectors.forEach(function(selector) {
+        if (selector.value) {
+          selectedOptions.push(selector.value);
+        }
+      });
+      
+      // Update sticky title with selected options
+      var stickyTitleEl = document.getElementById('js-sticky-title');
+      if (stickyTitleEl) {
+        if (selectedOptions.length > 0) {
+          stickyTitleEl.textContent = '- ' + selectedOptions.join(' / ');
+        } else {
+          stickyTitleEl.textContent = '';
+        }
+      }
+    }
+    
+    // Make function available globally so product template can call it
+    window.updateStickyVariantTitle = updateStickyVariantTitle;
+    
+    // Initialize custom dropdowns
+    document.addEventListener('DOMContentLoaded', function() {
+      initializeCustomDropdowns();
+      
+      // Find the main product form
+      var mainForm = document.querySelector('[id*="AddToCartForm"]');
+      if (mainForm) {
+        mainForm.addEventListener('change', function(e) {
+          if (e.target.matches('.single-option-selector, [name^="options["]')) {
+            // Update sticky cart selectors after main product changes
+            setTimeout(function() {
+              updateStickySelectorsFromMain();
+              updateStickyVariantTitle();
+            }, 50);
+          }
+        });
+      }
+    });
+    
+    function initializeCustomDropdowns() {
+      // Handle custom dropdown clicks
+      document.querySelectorAll('.custom-dropdown-trigger').forEach(function(trigger) {
+        trigger.addEventListener('click', function(e) {
+          e.stopPropagation();
+          var dropdown = this.closest('.custom-dropdown');
+          
+          // Close other dropdowns
+          document.querySelectorAll('.custom-dropdown.active').forEach(function(dd) {
+            if (dd !== dropdown) dd.classList.remove('active');
+          });
+          
+          // Toggle this dropdown
+          dropdown.classList.toggle('active');
+        });
+      });
+      
+      // Handle option selection
+      document.querySelectorAll('.custom-dropdown-option').forEach(function(option) {
+        option.addEventListener('click', function() {
+          var dropdown = this.closest('.custom-dropdown');
+          var trigger = dropdown.querySelector('.custom-dropdown-trigger .selected-value');
+          var hiddenSelect = dropdown.parentElement.querySelector('select[data-name]');
+          var value = this.getAttribute('data-value');
+          
+          // Update visual selection
+          dropdown.querySelectorAll('.custom-dropdown-option').forEach(function(opt) {
+            opt.classList.remove('selected');
+          });
+          this.classList.add('selected');
+          trigger.textContent = this.textContent;
+          
+          // Update hidden select and trigger change
+          if (hiddenSelect) {
+            hiddenSelect.value = value;
+            triggerOption(hiddenSelect);
+          }
+          
+          // Close dropdown
+          dropdown.classList.remove('active');
+        });
+      });
+      
+      // Close dropdowns when clicking outside
+      document.addEventListener('click', function() {
+        document.querySelectorAll('.custom-dropdown.active').forEach(function(dropdown) {
+          dropdown.classList.remove('active');
+        });
+      });
+    }
+    
+    // Listen for changes in main product to update sticky cart
+    document.addEventListener('DOMContentLoaded', function() {
+      // Find the main product form
+      var mainForm = document.querySelector('[id*="AddToCartForm"]');
+      if (mainForm) {
+        mainForm.addEventListener('change', function(e) {
+          if (e.target.matches('.single-option-selector, [name^="options["]')) {
+            // Update sticky cart selectors after main product changes
+            setTimeout(function() {
+              updateStickySelectorsFromMain();
+              updateStickyVariantTitle();
+            }, 50);
+          }
+        });
+      }
+    });
+    
+    function updateStickySelectorsFromMain() {
+      // Get current selections from main product and update sticky cart
+      var mainForm = document.querySelector('[id*="AddToCartForm"]');
+      if (!mainForm) return;
+      
+      console.log('Sticky cart updating from main product...'); // Debug log
+      
+      // Check radio buttons
+      mainForm.querySelectorAll('[name^="options["]').forEach(function(input) {
+        if (input.type === 'radio' && input.checked) {
+          var optionName = input.name.substring(input.name.indexOf('[') + 1, input.name.indexOf(']'));
+          console.log('Found main radio:', optionName, '=', input.value); // Debug log
+          
+          // Update corresponding sticky selector (both custom and hidden)
+          updateStickyDropdown(optionName, input.value);
+        }
+      });
+      
+      // Check dropdown selectors
+      mainForm.querySelectorAll('.single-option-selector').forEach(function(select) {
+        var optionName = select.getAttribute('data-name');
+        if (optionName && select.value) {
+          console.log('Found main dropdown:', optionName, '=', select.value); // Debug log
+          
+          // Update corresponding sticky selector (both custom and hidden)
+          updateStickyDropdown(optionName, select.value);
+        }
+      });
+    }
+    
+    function updateStickyDropdown(optionName, value) {
+      // Update hidden select
+      var hiddenSelect = document.querySelector('select[data-name="' + optionName + '"]');
+      if (hiddenSelect && hiddenSelect.value !== value) {
+        console.log('Updating hidden select from', hiddenSelect.value, 'to', value); // Debug log
+        hiddenSelect.value = value;
+      }
+      
+      // Update custom dropdown visual
+      var customDropdown = document.querySelector('.custom-dropdown[data-name="' + optionName + '"]');
+      if (customDropdown) {
+        var trigger = customDropdown.querySelector('.selected-value');
+        var options = customDropdown.querySelectorAll('.custom-dropdown-option');
+        
+        options.forEach(function(option) {
+          option.classList.remove('selected');
+          if (option.getAttribute('data-value') === value) {
+            option.classList.add('selected');
+            if (trigger) {
+              trigger.textContent = option.textContent;
+              console.log('Updated custom dropdown visual to:', value); // Debug log
+            }
+          }
+        });
+      }
+    }
+</script>{%- endif -%}
