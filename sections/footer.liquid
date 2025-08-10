@@ -181,6 +181,14 @@
     margin-bottom: 25px;
   }
   @media (max-width: 749px) {
+    /* Keep newsletter visible on mobile */
+    .newsletter-block {
+      display: block !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+      max-height: none !important;
+    }
+
     .site-footer .site-footer__section-title {
       margin-bottom: 16px;
       position: relative;
@@ -555,7 +563,7 @@
                       {{ block.settings.title }}
                     </h4>
                   {%- endif -%}
-                  <div class="site-footer-block ">
+                  <div class="site-footer-block newsletter-block" style="display: block !important; opacity: 1 !important; visibility: visible !important; max-height: none !important;">
                     <div class="form-vertical footer-email ">
                       {%- form 'customer'
                         , id: 'ContactFooter'
