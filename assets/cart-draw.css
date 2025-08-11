@@ -28,6 +28,19 @@ body.cart-open {
   overscroll-behavior: contain;
 }
 
+/* Ensure cart drawer appears on top */
+.js-mini-cart.active {
+  z-index: 9999 !important;
+}
+
+.js-mini-cart.active .mini-cart-content {
+  z-index: 9999 !important;
+}
+
+.js-mini-cart.active .overlaycart {
+  z-index: 9998 !important;
+}
+
 .js-mini-cart-content .mini-cart-image {
   flex: 0 0 104px;
   padding-right: 24px;

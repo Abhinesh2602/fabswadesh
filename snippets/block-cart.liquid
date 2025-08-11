@@ -67,7 +67,7 @@
 
       <footer class="mini-cart-footer js-cart-bottom">
         <div class="mini-cart-total font-family-1">
-          <div class="d-flex align-items-center mb-3 pb-3 border-bottom block-addon gap-5 ">
+          {% comment %} <div class="d-flex align-items-center mb-3 pb-3 border-bottom block-addon gap-5 ">
             {%- if settings.e_notecart -%}
               <div class="block-notecart block-addon__box">
                 <div class="small txt-body edit-notecart font-family-2 d-flex align-items-center" title="{{ 'cart.general.note_title' | t }}">
@@ -221,7 +221,7 @@
                 </div>
               </div>
             {%- endif -%}
-          </div>
+          </div> {% endcomment %}
           <div class="bottom-total">
             {{ 'cart.label.total' | t }}:
             <span class="js-cart-total">{{ cart.total_price | money }}</span>
