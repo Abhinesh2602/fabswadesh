@@ -2571,23 +2571,30 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   
   function openCartDrawer() {
-    // Open cart drawer by triggering the cart toggle
+    // Multiple methods to ensure cart drawer opens
+    var cartDrawer = document.querySelector('.js-mini-cart');
     var cartToggle = document.querySelector('.js-toggle-cart');
-    if (cartToggle) {
-      cartToggle.click();
-    }
     
-    // If the above doesn't work, try alternative methods
-    setTimeout(function() {
-      var cartDrawer = document.querySelector('.js-mini-cart');
-      if (cartDrawer) {
-        cartDrawer.classList.add('active');
+    if (cartDrawer && !cartDrawer.classList.contains('active')) {
+      // Method 1: Trigger click event
+      if (cartToggle) {
+        cartToggle.click();
       }
       
-      // Add active class to cart drawer
-      var miniCartContent = document.querySelector('.mini-cart-content');
-      if (miniCartContent) {
-        miniCartContent.classList.add('active');
+      // Method 2: Directly add active class as backup
+      setTimeout(function() {
+        if (!cartDrawer.classList.contains('active')) {
+          cartDrawer.classList.add('active');
+          document.body.classList.add('cart-open');
+        }
+      }, 50);
+    }
+    
+    // Update cart content after opening
+    setTimeout(function() {
+      if (typeof theme !== 'undefined' && theme.miniCart) {
+        theme.miniCart.generateCart();
+        theme.miniCart.updateElements();
       }
     }, 100);
   }

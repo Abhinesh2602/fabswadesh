@@ -1323,6 +1323,18 @@ window.AjaxCart = (function () {
   cart.prototype.success = function (item) {
     theme.miniCart.updateElements();
     theme.miniCart.generateCart();
+
+    // Force cart drawer to open if cartdraw is enabled
+    if (styleCart == "true") {
+      setTimeout(function () {
+        var $miniCart = $(".js-mini-cart");
+        if ($miniCart.length && !$miniCart.hasClass("active")) {
+          $miniCart.addClass("active");
+          $("body").addClass("cart-open");
+        }
+      }, 200);
+    }
+
     if (styleCart != "true") {
       if (this.showNotice) {
         var htmlVariant =
@@ -4626,6 +4638,21 @@ theme.addCartButton = (function () {
           ? "<i>(" + item.variant_title + ")</i>"
           : "";
       var styleCart = $(".js-mini-cart").attr("data-cartmini");
+
+      theme.miniCart.generateCart();
+      theme.miniCart.updateElements();
+
+      // Force cart drawer to open if cartdraw is enabled
+      if (styleCart == "true") {
+        setTimeout(function () {
+          var $miniCart = $(".js-mini-cart");
+          if ($miniCart.length && !$miniCart.hasClass("active")) {
+            $miniCart.addClass("active");
+            $("body").addClass("cart-open");
+          }
+        }, 300);
+      }
+
       if (styleCart != "true") {
         var htmlAlert =
           '<div class="media mt-2 alert--cart"><a class="mr-3" href="/cart"><img class="lazyload" data-src="' +
@@ -4638,8 +4665,7 @@ theme.addCartButton = (function () {
           htmlVariant +
           "<div><div>";
       }
-      theme.miniCart.generateCart();
-      theme.miniCart.updateElements();
+
       setTimeout(function () {
         styleCart != "true"
           ? theme.alert.new(
@@ -4958,16 +4984,29 @@ theme.miniCart = (function () {
   });
 
   //Keep popup when click cart / UX
-  $(document).on("click", cartToggle, function () {
+  $(document).on("click", cartToggle, function (e) {
+    e.preventDefault();
     var $miniCart = $(this).parent(miniCart);
+
+    // Force toggle class
     $miniCart.toggleClass("active");
+
+    // Debug logging
+    console.log("Cart toggle clicked, active:", $miniCart.hasClass("active"));
 
     // Prevent body scroll when cart is open
     if ($miniCart.hasClass("active")) {
       $("body").addClass("cart-open");
+      // Ensure cart content is generated
+      setTimeout(function () {
+        generateCart();
+        updateElements();
+      }, 100);
     } else {
       $("body").removeClass("cart-open");
     }
+
+    return false;
   });
 
   $(document).on("click", ".overlaycart, .close", function () {
