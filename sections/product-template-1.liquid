@@ -22,6 +22,13 @@
   >
 {%- endif -%}
 <style>
+  
+  .product-price-tax-note {
+  font-size: 0.85rem;
+  color: #666;
+  font-style: italic;
+  margin-top: -8px;
+}
   .modal-backdrop.show{
     display:none !important;
   }
@@ -570,6 +577,7 @@
                   <span id="ProductPrice-{{ section.id }}" class="product-single__price" itemprop="price" content="{{ current_variant.price | divided_by: 100.00 }}">
                     {{ current_variant.price | money }}
                   </span>
+                  <br>
                 </li>
                 {% if product.compare_at_price_max > product.price %}
                 <li>
@@ -603,12 +611,11 @@
                   </div>
                   </li>
                 {%- endif -%}
-
-
                 {%- if section.settings.stock_enable -%}
                 {% comment %} <li>{%- render 'productStock' , current_variant : current_variant -%}</li> {% endcomment %}
                 {%- endif -%}
               </ul>
+              <span class="product-price-tax-note">(Inclusive of All Taxes)</span>
               {%- when 'salepoint' -%}
               <div class="product-block salepoint d-flex align-items-center">
                 {% case block.settings.icon %}
