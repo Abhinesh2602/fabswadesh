@@ -73,6 +73,7 @@
         },
         "0a71f30d-dba2-4bca-a64d-c3cc2ed17e7d": {
           "type": "tabcustom",
+          "disabled": true,
           "settings": {
             "title_tab": "Care Guide",
             "icon": "leaf",
@@ -82,6 +83,7 @@
         },
         "2830007b-b9f5-4f33-86cf-680e0a91ca8d": {
           "type": "tabcustom",
+          "disabled": true,
           "settings": {
             "title_tab": "Shipping information",
             "icon": "truck",
@@ -554,6 +556,7 @@
         "template--14684877652053__c5690cdb-c04d-45fd-9c6c-cfee011363ca-166585292003960893-2",
         "4273663e-a3ea-49a8-a7c1-c872309fc99c"
       ],
+      "disabled": true,
       "settings": {
         "animation": "fade-up",
         "setwidth": "container",
@@ -613,6 +616,7 @@
         "template--14684877652053__bcb1cba3-80fc-49a2-a033-40cf0618e9c8-16659371170e440ef7-1",
         "template--14684877652053__bcb1cba3-80fc-49a2-a033-40cf0618e9c8-16659371170e440ef7-2"
       ],
+      "disabled": true,
       "settings": {
         "animation": "",
         "setwidth": "container",

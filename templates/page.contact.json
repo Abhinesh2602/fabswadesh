@@ -68,7 +68,7 @@
           "settings": {
             "bgblock": "rgba(0,0,0,0)",
             "title": "Address",
-            "description": "Copley, South Australia 5732, Australia.",
+            "description": "H.No.21-B, SantoshNagar, Hyderabad,Telangana-500059",
             "icon": "<i class=\"icon-placeholder\"></i>"
           }
         },
@@ -77,7 +77,7 @@
           "settings": {
             "bgblock": "rgba(0,0,0,0)",
             "title": "Call us",
-            "description": "+ (02) 6171 3859<br>\n+ (07) 4088 1324",
+            "description": "+ (91) 9676891390",
             "icon": "<i class=\"icon-phone\"></i>"
           }
         },
@@ -86,7 +86,7 @@
           "settings": {
             "bgblock": "rgba(0,0,0,0)",
             "title": "Open",
-            "description": "Monday - Friday: 8am - 4pm<br>\nSaturday - Sunday: 9am - 5pm",
+            "description": "Monday - Saturday: 11am - 7pm<br>",
             "icon": "<i class=\"icon-check-circle\"></i>"
           }
         },
@@ -95,7 +95,7 @@
           "settings": {
             "bgblock": "rgba(0,0,0,0)",
             "title": "Emails",
-            "description": "example@example.com<br>\nexample@example.com",
+            "description": "contact@fabswadesh.com",
             "icon": "<i class=\"icon-mail\"></i>"
           }
         }
