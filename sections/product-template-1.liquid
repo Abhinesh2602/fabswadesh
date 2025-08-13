@@ -606,7 +606,7 @@
 
 
                 {%- if section.settings.stock_enable -%}
-                <li>{%- render 'productStock' , current_variant : current_variant -%}</li>
+                {% comment %} <li>{%- render 'productStock' , current_variant : current_variant -%}</li> {% endcomment %}
                 {%- endif -%}
               </ul>
               {%- when 'salepoint' -%}
@@ -2180,18 +2180,27 @@ initPhotoSwipeFromDOM('.my-gallery');
 
     function syncVariantFromOptions() {
       const [o1, o2, o3] = currentSelections();
+      console.log('🔍 DEBUG: syncVariantFromOptions called, options:', [o1, o2, o3]);
       const match = findVariantByOptions(o1, o2, o3);
+      console.log('🔍 DEBUG: Found matching variant:', match ? match.id : 'none', match ? ('$' + (match.price / 100).toFixed(2)) : 'no price');
       if (!match) return;
       if (variantSelect.value !== String(match.id)) {
+        console.log('🔍 DEBUG: Updating variant selector from', variantSelect.value, 'to', match.id);
         variantSelect.value = String(match.id);
         // Trigger OptionSelectors -> onVariantSelected callback
         variantSelect.dispatchEvent(new Event('change', { bubbles: true }));
+      } else {
+        console.log('🔍 DEBUG: Variant selector already has correct value:', match.id);
+        // Even if the selector value is the same, we should still update the UI
+        updateProductInfo(match);
       }
     }
 
     // Listen to ANY change on option inputs (radios, selects, swatches)
     form.addEventListener('change', function (e) {
+      console.log('🔍 DEBUG: Form change event triggered by:', e.target.tagName, e.target.name || e.target.id, '=', e.target.value);
       if (e.target.matches('.single-option-selector, [name^="options["]')) {
+        console.log('🔍 DEBUG: Option change detected, calling syncVariantFromOptions');
         syncVariantFromOptions();
         
         // Also update sticky cart selectors to match
@@ -2233,13 +2242,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Function to update price and related elements
   function updateProductInfo(variant) {
+    console.log('🔍 DEBUG: updateProductInfo called with variant:', variant ? variant.id : 'null', variant ? ('$' + (variant.price / 100).toFixed(2)) : 'no price');
     if (!variant) return;
 
     // Update main product price
     var priceEl = document.getElementById('ProductPrice-{{ section.id }}');
+    console.log('🔍 DEBUG: priceEl found:', !!priceEl, 'updating to:', formatMoney(variant.price));
     if (priceEl) {
       priceEl.textContent = formatMoney(variant.price);
       priceEl.setAttribute('content', (variant.price / 100).toString());
+      console.log('🔍 DEBUG: Price updated to:', priceEl.textContent);
     }
 
     // Update sticky cart price
@@ -2382,7 +2394,9 @@ document.addEventListener('DOMContentLoaded', function() {
   // Main variant change handler
   function handleVariantChange() {
     var selectedId = parseInt(variantSelect.value, 10);
+    console.log('🔍 DEBUG: handleVariantChange called, selectedId:', selectedId);
     var variant = productData.variants.find(function(v) { return v.id === selectedId; });
+    console.log('🔍 DEBUG: Found variant for handleVariantChange:', variant ? variant.id : 'none', variant ? ('$' + (variant.price / 100).toFixed(2)) : 'no price');
     updateProductInfo(variant);
   }
 
