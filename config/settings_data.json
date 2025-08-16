@@ -2487,29 +2487,13 @@
               "show_social": true,
               "width": "25%"
             }
-          },
-          "89eb5f1e-2260-49c8-840c-f97823a94c9a": {
-            "type": "newsletter",
-            "settings": {
-              "bg_new": "#f7f7f7",
-              "border_new": "#f7f7f7",
-              "btn_bg_new": "#000000",
-              "btn_cl_new": "#ffffff",
-              "btn_cl_new_hover": "#ffffff",
-              "title": "Get exclusive updates on new collections, festive offers, and style inspirations.",
-              "subheading": "",
-              "enablesocial": true,
-              "text_align": "left",
-              "width": "33%"
-            }
           }
         },
         "block_order": [
           "dbb31813-2c26-4013-a98e-fe9a3fb8a781",
           "0c325a8d-bfb1-450c-a284-90ce9f9f9ee5",
           "02938bc4-37e0-4199-a42d-5120a9cb648f",
-          "a0427cc6-35bf-4e6f-8da6-9542b963b62f",
-          "89eb5f1e-2260-49c8-840c-f97823a94c9a"
+          "a0427cc6-35bf-4e6f-8da6-9542b963b62f"
         ],
         "settings": {
           "setwidth": "container",
