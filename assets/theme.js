@@ -4913,15 +4913,19 @@ theme.miniCart = (function () {
   $(document).on("click", ".js-remove-mini-cart", function () {
     var $this = $(this);
     var itemKey = $this.data("key");
-    s;
     var itemLine = $this.data("line");
-    var isOuterMiniCart = $this.closest(miniCart).length === 0 ? true : false; // check element from mini cart or not
+    var isOuterMiniCart = $this.closest(miniCart).length === 0 ? true : false;
     var $cartItem = $this.parents(".mini-cart-item");
 
-    // Disable the button to prevent multiple clicks
+    // Debug logging
+    console.log("Remove button clicked", {
+      itemKey,
+      itemLine,
+      isOuterMiniCart,
+    });
+
     $this.prop("disabled", true);
 
-    // Check gift wrap functionality - need to get the variant ID for gift wrap check
     Shopify.getCart(function (cart) {
       if (itemLine && cart.items[itemLine - 1]) {
         var product = cart.items[itemLine - 1];
@@ -4929,9 +4933,8 @@ theme.miniCart = (function () {
       }
     });
 
-    // Use cart key for removal (more reliable than variant ID)
+    // Try key-based removal first
     if (itemKey) {
-      // Use cart/change.js with cart line item key
       fetch("/cart/change.js", {
         method: "POST",
         headers: {
@@ -4942,9 +4945,12 @@ theme.miniCart = (function () {
           quantity: 0,
         }),
       })
-        .then((response) => response.json())
+        .then((response) => {
+          if (!response.ok) throw new Error("Network response was not ok");
+          return response.json();
+        })
         .then((cart) => {
-          // Smoothly remove the item after successful removal
+          console.log("Cart item removed via key", cart);
           $cartItem.fadeOut(300, function () {
             $(this).remove();
             updateElements();
@@ -4954,8 +4960,7 @@ theme.miniCart = (function () {
           });
         })
         .catch((error) => {
-          console.error("Error removing cart item:", error);
-          // Re-enable button on error
+          console.error("Error removing cart item by key:", error);
           $this.prop("disabled", false);
           // Fallback to line-based removal
           if (itemLine) {
@@ -4963,6 +4968,11 @@ theme.miniCart = (function () {
               $cartItem.fadeOut(300, function () {
                 $(this).remove();
                 updateElements();
+              });
+              Shopify.getCart(function (cart) {
+                if (cart.items.length > numberDisplayed || isOuterMiniCart) {
+                  generateCart();
+                }
               });
             });
           }
@@ -4980,6 +4990,11 @@ theme.miniCart = (function () {
           }
         });
       });
+    } else {
+      // If neither key nor line is available, reload cart
+      console.warn("No key or line found for cart item removal");
+      updateElements();
+      generateCart();
     }
   });
 
