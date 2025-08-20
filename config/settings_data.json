@@ -83,10 +83,10 @@
     "align_bread": "left",
     "layout_bread": "container",
     "share_image": "",
-    "social_facebook_link": "https://www.facebook.com/shopify",
-    "social_twitter_link": "https://twitter.com/shopify",
+    "social_facebook_link": "https://www.facebook.com/FABSWADESH",
+    "social_twitter_link": "",
     "social_pinterest_link": "",
-    "social_instagram_link": "https://instagram.com/shopify",
+    "social_instagram_link": "https://www.instagram.com/fab_swadesh",
     "social_tumblr_link": "",
     "social_snapchat_link": "",
     "social_youtube_link": "",
@@ -170,9 +170,10 @@
     "coupon_code_content": "<p><strong>december</strong> → 20% off 14 collections</p><p><strong>lotita</strong> → 10% off No usage limits</p><p>Coupon code will work on checkout page</p>",
     "free_shipping_enable": true,
     "free_shipping_value": 1000,
-    "free_end": "for Free Shipping",
-    "free_shipping_text": "Your order is free delivery !",
+    "free_end": "more for Free Shipping",
+    "free_shipping_text": "Your order is free shipping !",
     "shipping_calculator": false,
+    "shipping_calculator_default_country": "Inida",
     "safe_checkout_pcart": "",
     "safe_checkout_cart": "",
     "checkout_header_image": "",
@@ -2724,6 +2725,10 @@
           "image_slide_VKYmjJ",
           "image_slide_hW7WqB"
         ],
+        "settings": {}
+      },
+      "whatsapp-float": {
+        "type": "whatsapp-float",
         "settings": {}
       }
     },

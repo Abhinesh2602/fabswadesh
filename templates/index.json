@@ -717,17 +717,6 @@
     "076802e8-4d1d-49c0-92cf-72ec8c7302a1": {
       "type": "quotes",
       "blocks": {
-        "template--16458105913475__076802e8-4d1d-49c0-92cf-72ec8c7302a1-quote-1": {
-          "type": "quote",
-          "settings": {
-            "title": "\"Fab Swadesh turned my Kalamkari fabric into the most beautiful gown with perfect stitching and lovely applique work. It was exactly as I imagined, and I get endless compliments every time I wear it!\"",
-            "avatar": "shopify://shop_images/SmartSelect_20250424_213819_WhatsAppBusiness.jpg",
-            "author": "Dr. Bharati",
-            "info": "Happy Customer",
-            "rate": 5,
-            "quote": "Celebrating heritage, one masterpiece at a time"
-          }
-        },
         "template--16458105913475__076802e8-4d1d-49c0-92cf-72ec8c7302a1-quote-2": {
           "type": "quote",
           "settings": {
@@ -737,6 +726,17 @@
             "info": "Telangana State President, Pragna Bharati",
             "rate": 5,
             "quote": "Preserving tradition, empowering every celebration"
+          }
+        },
+        "quote_YhGgRj": {
+          "type": "quote",
+          "settings": {
+            "title": "\"I ordered two lehenga sets from Fab Swadesh for my daughter's engagement and was beyond happy. The team was helpful and patient, and the lehengas were beautifully crafted, vibrant, and comfortable. Both my daughters looked stunning and received endless compliments. Fab Swadesh truly never disappoints.\"",
+            "avatar": "shopify://shop_images/SmartSelect_20250424_213722_WhatsAppBusiness.jpg",
+            "author": "Swathi",
+            "info": "Happy Customer",
+            "rate": 5,
+            "quote": "Crafting joy for life’s special moments"
           }
         },
         "template--16458105913475__076802e8-4d1d-49c0-92cf-72ec8c7302a1-quote-3": {
@@ -750,23 +750,23 @@
             "quote": "Celebrating loyalty with timeless elegance"
           }
         },
-        "quote_YhGgRj": {
+        "template--16458105913475__076802e8-4d1d-49c0-92cf-72ec8c7302a1-quote-1": {
           "type": "quote",
           "settings": {
-            "title": "\"I ordered two lehenga sets from Fab Swadesh for my daughter's engagement and was beyond happy. The team was helpful and patient, and the lehengas were beautifully crafted, vibrant, and comfortable. Both my daughters looked stunning and received endless compliments. Fab Swadesh truly never disappoints.\"",
-            "avatar": "shopify://shop_images/SmartSelect_20250424_213722_WhatsAppBusiness.jpg",
-            "author": "Swathi",
+            "title": "\"Fab Swadesh turned my Kalamkari fabric into the most beautiful gown with perfect stitching and lovely applique work. It was exactly as I imagined, and I get endless compliments every time I wear it!\"",
+            "avatar": "shopify://shop_images/SmartSelect_20250424_213819_WhatsAppBusiness.jpg",
+            "author": "Dr. Bharati",
             "info": "Happy Customer",
             "rate": 5,
-            "quote": "Crafting joy for life’s special moments"
+            "quote": "Celebrating heritage, one masterpiece at a time"
           }
         }
       },
       "block_order": [
-        "template--16458105913475__076802e8-4d1d-49c0-92cf-72ec8c7302a1-quote-1",
         "template--16458105913475__076802e8-4d1d-49c0-92cf-72ec8c7302a1-quote-2",
+        "quote_YhGgRj",
         "template--16458105913475__076802e8-4d1d-49c0-92cf-72ec8c7302a1-quote-3",
-        "quote_YhGgRj"
+        "template--16458105913475__076802e8-4d1d-49c0-92cf-72ec8c7302a1-quote-1"
       ],
       "settings": {
         "animation": "",
